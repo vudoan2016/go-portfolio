@@ -3,11 +3,13 @@ package main
 import (
 	"os"
 
-	symbol "github.com/vudoan2016/portfolio/input"
-	html "github.com/vudoan2016/portfolio/output"
+	"github.com/vudoan2016/portfolio/analysis"
+	"github.com/vudoan2016/portfolio/input"
+	"github.com/vudoan2016/portfolio/output"
 )
 
 func main() {
-	symbols := symbol.Get(os.Args[1])
-	html.Render(symbols)
+	symbols := input.Get(os.Args[1])
+	analysis.Analyze(&symbols)
+	output.Render(symbols)
 }

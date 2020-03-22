@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <h1>{{.PageTitle}}</h1>
+  <body>
+    <table>
+      <caption>
+        <b>Before Taxes</b>
+      </caption>
+      <tr>
+        <th>Name</th>
+        <th>Today</th>
+        <th>Value</th>
+        <th>Weight</th>
+        <th>Gain</th>
+        <th>Percentage</th>
+        <th>Shares</th>
+        <th>Purchase Price</th>
+        <th>Purchase Date</th>
+        <th>Sale Price</th>
+        <th>Sale Date</th>
+      </tr>
+      {{ range .Pretaxes.Positions}}
+      <tr>
+        <td>{{ .Name }}</td>
+        <td>{{ .Price }}</td>
+        <td>{{ .Value }}</td>
+        <td>{{ .Weight }}</td>
+        <td>{{ .Gain }}</td>
+        <td>{{ .Percentage }}</td>
+        <td>{{ .Shares }}</td>
+        <td>{{ .PurchasePrice }}</td>
+        <td>{{ .PurchaseDate }}</td>
+        <td>{{ .SalePrice }}</td>
+        <td>{{ .SaleDate }}</td>
+      </tr>
+      {{end}}
+    </table>
+
+    <b
+      >Market value: {{.Pretaxes.Value}} Gain:
+      {{.Pretaxes.Gain}}({{.Pretaxes.Percentage}}%)</b
+    >
+
+    <table>
+      <caption>
+        <b>After Taxes</b>
+      </caption>
+      <tr>
+        <th>Name</th>
+        <th>Today</th>
+        <th>Value</th>
+        <td>Weight</td>
+        <th>Gain</th>
+        <th>Percentage</th>
+        <th>Shares</th>
+        <th>Purchase Price</th>
+        <th>Purchase Date</th>
+        <th>Sale Price</th>
+        <th>Sale Date</th>
+      </tr>
+      {{ range .Posttaxes.Positions}}
+      <tr>
+        <td>{{ .Name }}</td>
+        <td>{{ .Price }}</td>
+        <td>{{ .Value }}</td>
+        <td>{{ .Weight }}</td>
+        <td>{{ .Gain }}</td>
+        <td>{{ .Percentage }}</td>
+        <td>{{ .Shares }}</td>
+        <td>{{ .PurchasePrice }}</td>
+        <td>{{ .PurchaseDate }}</td>
+        <td>{{ .SalePrice }}</td>
+        <td>{{ .SaleDate }}</td>
+      </tr>
+      {{ end}}
+    </table>
+
+    <b
+      >Market value: {{.Posttaxes.Value}} Gain:
+      {{.Posttaxes.Gain}}({{.Posttaxes.Percentage}}%)</b
+    >
+  </body>
+</html>

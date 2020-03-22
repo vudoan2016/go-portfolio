@@ -1,0 +1,571 @@
+{
+  "companies": [
+    {
+      "symbol": "msft",
+      "shares": 58.14,
+      "buy date": "02-24-2020",
+      "purchase price": 172.01,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "msft",
+      "shares": 319,
+      "buy date": "01-29-2018",
+      "purchase price": 93.84,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "msft",
+      "shares": 540,
+      "buy date": "01-29-2018",
+      "purchase price": 92.36,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "msft",
+      "shares": 238,
+      "buy date": "11-27-2017",
+      "purchase price": 83.86,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "amzn",
+      "shares": 17,
+      "buy date": "02-08-2018",
+      "purchase price": 1417.22,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "amzn",
+      "shares": 35,
+      "buy date": "01-30-2018",
+      "purchase price": 1374.82,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "ftnt",
+      "shares": 711,
+      "buy date": "06-07-2018",
+      "purchase price": 61.51,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "nvda",
+      "shares": 206,
+      "buy date": "01-30-2018",
+      "purchase price": 242.72,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "googl",
+      "shares": 40,
+      "buy date": "01-25-2019",
+      "purchase price": 1140.85,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "sdscx",
+      "shares": 1334.573,
+      "buy date": "02-20-2020",
+      "purchase price": 28.22,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "sdscx",
+      "shares": 331.31,
+      "buy date": "06-08-2018",
+      "purchase price": 23.53,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "vinix",
+      "shares": 130.189,
+      "buy date": "02-20-2018",
+      "purchase price": 303.81,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "vinix",
+      "shares": 32.843,
+      "buy date": "02-20-2018",
+      "purchase price": 303.81,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "csco",
+      "shares": 1000,
+      "buy date": "05-15-2019",
+      "purchase price": 52.39,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "aapl",
+      "shares": 103,
+      "buy date": "11-27-2017",
+      "purchase price": 174.21,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "abmd",
+      "shares": 140,
+      "buy date": "07-31-2019",
+      "purchase price": 279.86,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "twlo",
+      "shares": 100,
+      "buy date": "07-31-2019",
+      "purchase price": 139.1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "kl",
+      "shares": 287,
+      "buy date": "02-20-2020",
+      "purchase price": 34.81,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "mcd",
+      "shares": 66.667,
+      "buy date": "03-20-2020",
+      "purchase price": 148.49,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "ibm",
+      "shares": 105.263,
+      "buy date": "03-20-2020",
+      "purchase price": 95.0,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "ba",
+      "shares": 105,
+      "buy date": "03-20-2020",
+      "purchase price": 95.0,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "abt",
+      "shares": 140,
+      "buy date": "03-20-2020",
+      "purchase price": 70.0,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "blk",
+      "shares": 18,
+      "buy date": "02-21-2020",
+      "purchase price": 556.86,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "blk",
+      "shares": 20,
+      "buy date": "02-24-2020",
+      "purchase price": 532.21,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "br",
+      "shares": 15,
+      "buy date": "03-13-2018",
+      "purchase price": 108.28,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "crm",
+      "shares": 54,
+      "buy date": "02-25-2020",
+      "purchase price": 180.74,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "panw",
+      "shares": 50,
+      "buy date": "02-25-2020",
+      "purchase price": 194.74,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "splk",
+      "shares": 60,
+      "buy date": "02-21-2020",
+      "purchase price": 166.62,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "veev",
+      "shares": 63,
+      "buy date": "02-21-2020",
+      "purchase price": 158.76,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "cprt",
+      "shares": 100,
+      "buy date": "03-20-2020",
+      "purchase price": 97.38,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "cash",
+      "shares": 121155.77,
+      "buy date": "03-21-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "vig",
+      "shares": 538.822,
+      "buy date": "11-7-2017",
+      "purchase price": 96.93,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "brk-b",
+      "shares": 250,
+      "buy date": "08-01-2019",
+      "purchase price": 201.92,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "isrg",
+      "shares": 103,
+      "buy date": "06-07-2019",
+      "purchase price": 483.16,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "amzn",
+      "shares": 9,
+      "buy date": "01-16-2018",
+      "purchase price": 1307.77,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "amzn",
+      "shares": 19,
+      "buy date": "01-12-2018",
+      "purchase price": 1302.67,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 36,
+      "buy date": "06-20-2019",
+      "purchase price": 44.33,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 268,
+      "buy date": "06-15-2019",
+      "purchase price": 29.37,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 36,
+      "buy date": "03-20-2019",
+      "purchase price": 37.92,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 41,
+      "buy date": "12-21-2018",
+      "purchase price": 32.91,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 227,
+      "buy date": "12-15-2018",
+      "purchase price": 18.13,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 270,
+      "buy date": "12-13-2019",
+      "purchase price": 29.37,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 40,
+      "buy date": "12-20-2019",
+      "purchase price": 42.39,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 41,
+      "buy date": "09-20-2019",
+      "purchase price": 39.58,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 41,
+      "buy date": "09-20-2018",
+      "purchase price": 30.99,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cien",
+      "shares": 36,
+      "buy date": "03-20-2020",
+      "purchase price": 36.07,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "v",
+      "shares": 50,
+      "buy date": "02-24-2020",
+      "purchase price": 199.62,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "jpm",
+      "shares": 75,
+      "buy date": "02-24-2020",
+      "purchase price": 132.41,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "c",
+      "shares": 137,
+      "buy date": "02-24-2020",
+      "purchase price": 72.53,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "ma",
+      "shares": 35,
+      "buy date": "02-25-2020",
+      "purchase price": 303.57,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "ma",
+      "shares": 30,
+      "buy date": "02-24-2020",
+      "purchase price": 325.83,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "nke",
+      "shares": 135,
+      "buy date": "03-20-2020",
+      "purchase price": 70,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "ctas",
+      "shares": 54,
+      "buy date": "03-20-2020",
+      "purchase price": 175,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "wm",
+      "shares": 100,
+      "buy date": "03-20-2020",
+      "purchase price": 98,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "aapl",
+      "shares": 40,
+      "buy date": "03-20-2020",
+      "purchase price": 245,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "cash",
+      "shares": 145980,
+      "buy date": "03-21-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "veev",
+      "shares": 628,
+      "buy date": "06-07-2018",
+      "purchase price": 79.56,
+      "sale date": "08-23-2018",
+      "sale price": 89.6653,
+      "taxed": false
+    },
+    {
+      "symbol": "fb",
+      "shares": 261,
+      "buy date": "02-02-2018",
+      "purchase price": 190.895,
+      "sale date": "07-25-2018",
+      "sale price": 218.5,
+      "taxed": false
+    },
+    {
+      "symbol": "pypl",
+      "shares": 355,
+      "buy date": "01-29-2018",
+      "purchase price": 84.39,
+      "sale date": "08-23-2018",
+      "sale price": 87.3222,
+      "taxed": false
+    },
+    {
+      "symbol": "hd",
+      "shares": 136,
+      "buy date": "01-29-2018",
+      "purchase price": 205.32,
+      "sale date": "09-04-2018",
+      "sale price": 205.3,
+      "taxed": false
+    },
+    {
+      "symbol": "v",
+      "shares": 178,
+      "buy date": "01-27-2017",
+      "purchase price": 112.31,
+      "sale date": "07-27-2018",
+      "sale price": 141.855,
+      "taxed": false
+    },
+    {
+      "symbol": "pogrx",
+      "shares": 2450,
+      "buy date": "01-29-2018",
+      "purchase price": 40.81,
+      "sale date": "07-12-2018",
+      "sale price": 41.3,
+      "taxed": false
+    },
+    {
+      "symbol": "rth",
+      "shares": 966,
+      "buy date": "01-29-2018",
+      "purchase price": 103.435,
+      "sale date": "01-29-2018",
+      "sale price": 95.2314,
+      "taxed": false
+    }
+  ]
+}
