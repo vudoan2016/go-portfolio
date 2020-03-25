@@ -563,9 +563,81 @@
       "shares": 966,
       "buy date": "01-29-2018",
       "purchase price": 103.435,
-      "sale date": "01-29-2018",
+      "sale date": "02-28-2018",
       "sale price": 95.2314,
       "taxed": false
+    },
+    {
+      "symbol": "rth",
+      "shares": 508,
+      "buy date": "01-22-2018",
+      "purchase price": 98.26,
+      "sale date": "02-28-2018",
+      "sale price": 98.51,
+      "taxed": true
+    },
+    {
+      "symbol": "pogrx",
+      "shares": 1402.454,
+      "buy date": "01-19-2018",
+      "purchase price": 39.93,
+      "sale date": "03-08-2018",
+      "sale price": 41.32,
+      "taxed": true
+    },
+    {
+      "symbol": "newr",
+      "shares": 113,
+      "buy date": "06-21-2018",
+      "purchase price": 105.59,
+      "sale date": "02-26-2019",
+      "sale price": 106,
+      "taxed": true
+    },
+    {
+      "symbol": "vti",
+      "shares": 375,
+      "buy date": "11-07-2017",
+      "purchase price": 133.16,
+      "sale date": "03-29-2018",
+      "sale price": 136.19,
+      "taxed": true
+    },
+    {
+      "symbol": "vug",
+      "shares": 185,
+      "buy date": "11-30-2017",
+      "purchase price": 139.72,
+      "sale date": "04-30-2018",
+      "sale price": 142.54,
+      "taxed": true
+    },
+    {
+      "symbol": "vug",
+      "shares": 179,
+      "buy date": "10-18-2017",
+      "purchase price": 135.42,
+      "sale date": "04-30-2018",
+      "sale price": 142.54,
+      "taxed": true
+    },
+    {
+      "symbol": "vbiax",
+      "shares": 2236.803,
+      "buy date": "09-13-2017",
+      "purchase price": 33.53,
+      "sale date": "01-17-2018",
+      "sale price": 35.43,
+      "taxed": true
+    },
+    {
+      "symbol": "vbiax",
+      "shares": 724.218,
+      "buy date": "11-29-2017",
+      "purchase price": 34.52,
+      "sale date": "01-17-2018",
+      "sale price": 35.43,
+      "taxed": true
     }
   ]
 }

@@ -1,10 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
   <h1>{{.PageTitle}}</h1>
+  <head>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      function createData(comps) {
+        var array = [];
+        var header = ["Symbol", "Weight"];
+        array.push(header);
+
+        for (var i = 0; i < comps.length; i++) {
+          var row = [];
+          row.push(comps[i].Symbol);
+          row.push(comps[i].Weight);
+          array.push(row);
+        }
+        var data = google.visualization.arrayToDataTable(array);
+        return data
+      }
+
+      function drawChart() {
+        var pretaxComps = {{.PretaxComps}};
+        var posttaxComps = {{.PosttaxComps}};
+        var pretaxData = createData(pretaxComps)
+        var posttaxData = createData(posttaxComps)
+
+        var options = {
+          title: "Before Tax Components"
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("preTaxHoldings")
+        );
+
+        chart.draw(pretaxData, options);
+
+        options = {
+          title: "After Tax Components"
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("postTaxHoldings")
+        );
+
+        chart.draw(posttaxData, options);
+      }
+    </script>
+  </head>
   <body>
     <table>
       <caption>
-        <b>Before Taxes</b>
+        <b>Before Tax Holdings</b>
       </caption>
       <tr>
         <th>Name</th>
@@ -18,6 +70,9 @@
         <th>Purchase Date</th>
         <th>Sale Price</th>
         <th>Sale Date</th>
+        <th>Forward PE</th>
+        <th>Forward EPS</th>
+        <th>Trailing Annual Dividend Rate</th>
       </tr>
       {{ range .Pretaxes.Positions}}
       <tr>
@@ -32,10 +87,14 @@
         <td>{{ .PurchaseDate }}</td>
         <td>{{ .SalePrice }}</td>
         <td>{{ .SaleDate }}</td>
+        <td>{{ .ForwardPE }}</td>
+        <td>{{ .ForwardEPS }}</td>
+        <td>{{ .TrailingAnnualDividendRate }}</td>
       </tr>
       {{end}}
     </table>
 
+    <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
     <b
       >Market value: {{.Pretaxes.Value}} Gain:
       {{.Pretaxes.Gain}}({{.Pretaxes.Percentage}}%)</b
@@ -43,7 +102,7 @@
 
     <table>
       <caption>
-        <b>After Taxes</b>
+        <b>After Tax Holdings</b>
       </caption>
       <tr>
         <th>Name</th>
@@ -57,6 +116,9 @@
         <th>Purchase Date</th>
         <th>Sale Price</th>
         <th>Sale Date</th>
+        <th>Forward PE</th>
+        <th>Forward EPS</th>
+        <th>Trailing Annual Dividend Rate</th>
       </tr>
       {{ range .Posttaxes.Positions}}
       <tr>
@@ -71,10 +133,14 @@
         <td>{{ .PurchaseDate }}</td>
         <td>{{ .SalePrice }}</td>
         <td>{{ .SaleDate }}</td>
+        <td>{{ .ForwardPE }}</td>
+        <td>{{ .ForwardEPS }}</td>
+        <td>{{ .TrailingAnnualDividendRate }}</td>
       </tr>
       {{ end}}
     </table>
 
+    <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
     <b
       >Market value: {{.Posttaxes.Value}} Gain:
       {{.Posttaxes.Gain}}({{.Posttaxes.Percentage}}%)</b

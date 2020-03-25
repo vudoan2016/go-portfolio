@@ -20,28 +20,37 @@ func getFinancial(pos *input.Position) {
 		} else {
 			pos.Name = equity.ShortName
 			pos.Price = equity.RegularMarketPrice
+			pos.ForwardPE = equity.ForwardPE
+			pos.ForwardEPS = equity.EpsForward
+			pos.TrailingAnnualDividendRate = equity.TrailingAnnualDividendRate
 		}
 	}
 }
 
 // Analyze calculates the portfolio's performance
 func Analyze(portfolio *input.Portfolio) {
+	portfolio.Positions = consolidate(portfolio.Positions)
+
 	for i, pos := range portfolio.Positions {
-		getFinancial(&pos)
-		portfolio.Positions[i].Name = pos.Name
-		portfolio.Positions[i].Price = pos.Price
+		getFinancial(&portfolio.Positions[i])
+
 		if pos.SaleDate == "" {
+			portfolio.Positions[i].Value = portfolio.Positions[i].Price * portfolio.Positions[i].Shares
+			portfolio.Positions[i].Gain = (portfolio.Positions[i].Price - portfolio.Positions[i].BuyPrice) * portfolio.Positions[i].Shares
 			if pos.Taxed {
-				portfolio.Posttaxes.Value += pos.Price * pos.Shares
-				portfolio.Posttaxes.Cost += pos.BuyPrice * pos.Shares
+				portfolio.Posttaxes.Value += portfolio.Positions[i].Value
 			} else {
-				portfolio.Pretaxes.Value += pos.Price * pos.Shares
-				portfolio.Pretaxes.Cost += pos.BuyPrice * pos.Shares
+				portfolio.Pretaxes.Value += portfolio.Positions[i].Value
 			}
-			portfolio.Positions[i].Gain = (pos.Price - pos.BuyPrice) * pos.Shares
-			portfolio.Positions[i].Value = pos.Price * pos.Shares
 		} else {
-			portfolio.Positions[i].Gain = (pos.SalePrice - pos.BuyPrice) * pos.Shares
+			portfolio.Positions[i].Gain = (portfolio.Positions[i].SalePrice - portfolio.Positions[i].BuyPrice) * portfolio.Positions[i].Shares
+		}
+		if portfolio.Positions[i].Taxed {
+			portfolio.Posttaxes.Cost += portfolio.Positions[i].BuyPrice * portfolio.Positions[i].Shares
+			portfolio.Posttaxes.Gain += portfolio.Positions[i].Gain
+		} else {
+			portfolio.Pretaxes.Cost += portfolio.Positions[i].BuyPrice * portfolio.Positions[i].Shares
+			portfolio.Pretaxes.Gain += portfolio.Positions[i].Gain
 		}
 	}
 	for i, pos := range portfolio.Positions {
@@ -71,4 +80,24 @@ func (c positions) Swap(i, j int) {
 
 func sortPositionsByWeight(pos []input.Position) {
 	sort.Sort(sort.Reverse(positions(pos)))
+}
+
+func consolidate(pos positions) positions {
+	var consolidated positions
+
+	for _, p := range pos {
+		found := false
+		for i, c := range consolidated {
+			if p.Ticker == c.Ticker && p.Taxed == c.Taxed &&
+				((p.SaleDate == "" && c.SaleDate == "") || (p.SaleDate != "" && c.SaleDate != "")) {
+				consolidated[i].Shares += p.Shares
+				consolidated[i].BuyPrice = (p.BuyPrice + c.BuyPrice) / 2
+				found = true
+			}
+		}
+		if !found {
+			consolidated = append(consolidated, p)
+		}
+	}
+	return consolidated
 }
