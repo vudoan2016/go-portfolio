@@ -10,15 +10,15 @@
       google.charts.load("current", { packages: ["corechart"] });
       google.charts.setOnLoadCallback(drawChart);
 
-      function createData(comps) {
+      function createData(positions) {
         var array = [];
         var header = ["Symbol", "Weight"];
         array.push(header);
 
-        for (var i = 0; i < comps.length; i++) {
+        for (var i = 0; i < positions.length; i++) {
           var row = [];
-          row.push(comps[i].Symbol);
-          row.push(comps[i].Weight);
+          row.push(positions[i].symbol);
+          row.push(positions[i].Weight);
           array.push(row);
         }
         var data = google.visualization.arrayToDataTable(array);
@@ -26,10 +26,10 @@
       }
 
       function drawChart() {
-        var pretaxComps = {{.PretaxComps}};
-        var posttaxComps = {{.PosttaxComps}};
-        var pretaxData = createData(pretaxComps)
-        var posttaxData = createData(posttaxComps)
+        var pretaxPositions = {{ .Pretaxes.Positions }}; // pretax positions
+        var posttaxPositions = {{ .Posttaxes.Positions }}; // posttax positions
+        var pretaxData = createData(pretaxPositions)
+        var posttaxData = createData(posttaxPositions)
 
         var options = {
           title: "Before Tax Components"
@@ -83,8 +83,8 @@
         <td>{{ .Gain }}</td>
         <td>{{ .Percentage }}</td>
         <td>{{ .Shares }}</td>
-        <td>{{ .PurchasePrice }}</td>
-        <td>{{ .PurchaseDate }}</td>
+        <td>{{ .BuyPrice }}</td>
+        <td>{{ .BuyDate }}</td>
         <td>{{ .SalePrice }}</td>
         <td>{{ .SaleDate }}</td>
         <td>{{ .ForwardPE }}</td>
@@ -129,8 +129,8 @@
         <td>{{ .Gain }}</td>
         <td>{{ .Percentage }}</td>
         <td>{{ .Shares }}</td>
-        <td>{{ .PurchasePrice }}</td>
-        <td>{{ .PurchaseDate }}</td>
+        <td>{{ .BuyPrice }}</td>
+        <td>{{ .BuyDate }}</td>
         <td>{{ .SalePrice }}</td>
         <td>{{ .SaleDate }}</td>
         <td>{{ .ForwardPE }}</td>

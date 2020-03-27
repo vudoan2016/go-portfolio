@@ -31,6 +31,7 @@ type Position struct {
 	Price                      float64
 	Value                      float64
 	Weight                     float64
+	Cost                       float64
 	Gain                       float64
 	Percentage                 float64
 	ForwardPE                  float64

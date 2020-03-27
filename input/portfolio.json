@@ -110,7 +110,7 @@
     },
     {
       "symbol": "vinix",
-      "shares": 32.843,
+      "shares": 34.175,
       "buy date": "02-20-2018",
       "purchase price": 303.81,
       "sale date": "",
@@ -271,8 +271,35 @@
       "taxed": false
     },
     {
+      "symbol": "tmo",
+      "shares": 36,
+      "buy date": "03-25-2020",
+      "purchase price": 275,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "cost",
+      "shares": 35,
+      "buy date": "03-24-2020",
+      "purchase price": 285,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "tsn",
+      "shares": 158,
+      "buy date": "03-26-2020",
+      "purchase price": 61,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
       "symbol": "cash",
-      "shares": 121155.77,
+      "shares": 91580.76,
       "buy date": "03-21-2020",
       "purchase price": 1,
       "sale date": "",
@@ -496,9 +523,18 @@
       "taxed": true
     },
     {
+      "symbol": "googl",
+      "shares": 8,
+      "buy date": "03-25-2020",
+      "purchase price": 1100,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
       "symbol": "cash",
-      "shares": 145980,
-      "buy date": "03-21-2020",
+      "shares": 137179.99,
+      "buy date": "03-26-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,
