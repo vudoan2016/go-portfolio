@@ -299,7 +299,7 @@
     },
     {
       "symbol": "cash",
-      "shares": 91580.76,
+      "shares": 71781.55,
       "buy date": "03-21-2020",
       "purchase price": 1,
       "sale date": "",
@@ -532,8 +532,26 @@
       "taxed": true
     },
     {
+      "symbol": "dal",
+      "shares": 327,
+      "buy date": "03-27-2020",
+      "purchase price": 30,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "sbux",
+      "shares": 143,
+      "buy date": "03-27-2020",
+      "purchase price": 66,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
       "symbol": "cash",
-      "shares": 137179.99,
+      "shares": 117931.99,
       "buy date": "03-26-2020",
       "purchase price": 1,
       "sale date": "",

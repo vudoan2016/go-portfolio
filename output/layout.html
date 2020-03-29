@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <h1>{{.PageTitle}}</h1>
+  <h1>{{.Date}}</h1>
   <head>
     <script
       type="text/javascript"
@@ -80,7 +80,11 @@
         <td>{{ .Price }}</td>
         <td>{{ .Value }}</td>
         <td>{{ .Weight }}</td>
-        <td>{{ .Gain }}</td>
+        {{if lt .Gain 0.0}}
+        <td><font color="red">{{.Gain}}</font></td>
+        {{else}}
+        <td><font color="green">{{.Gain}}</font></td>
+        {{end}}
         <td>{{ .Percentage }}</td>
         <td>{{ .Shares }}</td>
         <td>{{ .BuyPrice }}</td>
@@ -126,7 +130,11 @@
         <td>{{ .Price }}</td>
         <td>{{ .Value }}</td>
         <td>{{ .Weight }}</td>
-        <td>{{ .Gain }}</td>
+        {{if lt .Gain 0.0}}
+        <td><font color="red">{{.Gain}}</font></td>
+        {{else}}
+        <td><font color="green">{{.Gain}}</font></td>
+        {{end}}
         <td>{{ .Percentage }}</td>
         <td>{{ .Shares }}</td>
         <td>{{ .BuyPrice }}</td>

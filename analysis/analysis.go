@@ -21,7 +21,7 @@ func getFinancial(pos *input.Position) {
 		} else {
 			pos.Name = equity.ShortName
 			pos.Price = equity.RegularMarketPrice
-			pos.ForwardPE = math.Floor(100*equity.ForwardPE) / 100
+			pos.ForwardPE = equity.ForwardPE
 			pos.ForwardEPS = equity.EpsForward
 			pos.TrailingAnnualDividendRate = equity.TrailingAnnualDividendRate
 		}
@@ -54,9 +54,11 @@ func Analyze(portfolio *input.Portfolio) {
 			portfolio.Pretaxes.Gain += portfolio.Positions[i].Gain
 		}
 	}
-	portfolio.Positions = consolidate(portfolio.Positions)
+	//portfolio.Positions = consolidate(portfolio.Positions)
 	for i, pos := range portfolio.Positions {
 		portfolio.Positions[i].Percentage = math.Floor(100*pos.Gain/pos.Cost*100) / 100
+		// 2 trailing digits
+		portfolio.Positions[i].ForwardPE = math.Floor(100*portfolio.Positions[i].ForwardPE) / 100
 		portfolio.Positions[i].Value = math.Floor(100*portfolio.Positions[i].Value) / 100
 		portfolio.Positions[i].Gain = math.Floor(100*portfolio.Positions[i].Gain) / 100
 		portfolio.Positions[i].Shares = math.Floor(100*portfolio.Positions[i].Shares) / 100
@@ -88,6 +90,7 @@ func sortPositionsByWeight(pos []input.Position) {
 	sort.Sort(sort.Reverse(positions(pos)))
 }
 
+// Combine lots of the same holding
 func consolidate(pos positions) positions {
 	var consolidated positions
 

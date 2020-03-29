@@ -43,7 +43,7 @@ type Position struct {
 func Get(fileName string) Portfolio {
 	jsonFile, err := os.Open(fileName)
 	if err != nil {
-		log.Println(err)
+		log.Println(fileName, err)
 	}
 	byteStream, _ := ioutil.ReadAll(jsonFile)
 

@@ -6,21 +6,22 @@ import (
 	"log"
 	"math"
 	"os"
+	"time"
 
 	"github.com/vudoan2016/portfolio/input"
 )
 
 type page struct {
-	PageTitle string
+	Date      string
 	Pretaxes  portfolio
 	Posttaxes portfolio
 }
 
 type portfolio struct {
 	Positions  []input.Position
-	Value      float64
-	Gain       float64
-	Percentage float64
+	Value      float64 // market value of portfolio
+	Gain       float64 // overall gain
+	Percentage float64 // gain percentage
 }
 
 // Render formats the data & writes it to a html file
@@ -30,8 +31,9 @@ func Render(p input.Portfolio) {
 		log.Println(err)
 		return
 	}
+	now := time.Now()
 	data := page{
-		PageTitle: "Portfolio",
+		Date: now.Format("01-02-2006"),
 		Pretaxes: portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
 			Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
 			Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100},
