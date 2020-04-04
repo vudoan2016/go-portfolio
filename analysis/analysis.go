@@ -10,7 +10,7 @@ import (
 )
 
 func getFinancial(pos *input.Position) {
-	if pos.Ticker == "cash" {
+	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
 		pos.Name = pos.Ticker
 		pos.Price = pos.BuyPrice
 	} else {
@@ -49,12 +49,20 @@ func Analyze(portfolio *input.Portfolio) {
 		if portfolio.Positions[i].Taxed {
 			portfolio.Posttaxes.Cost += portfolio.Positions[i].Cost
 			portfolio.Posttaxes.Gain += portfolio.Positions[i].Gain
+			if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
+				portfolio.Posttaxes.Cash += portfolio.Positions[i].Value
+			}
 		} else {
 			portfolio.Pretaxes.Cost += portfolio.Positions[i].Cost
 			portfolio.Pretaxes.Gain += portfolio.Positions[i].Gain
+			if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
+				portfolio.Pretaxes.Cash += portfolio.Positions[i].Value
+			}
 		}
 	}
+
 	//portfolio.Positions = consolidate(portfolio.Positions)
+
 	for i, pos := range portfolio.Positions {
 		portfolio.Positions[i].Percentage = math.Floor(100*pos.Gain/pos.Cost*100) / 100
 		// 2 trailing digits

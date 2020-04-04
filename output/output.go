@@ -22,6 +22,7 @@ type portfolio struct {
 	Value      float64 // market value of portfolio
 	Gain       float64 // overall gain
 	Percentage float64 // gain percentage
+	Cash       float64 // cash available
 }
 
 // Render formats the data & writes it to a html file
@@ -33,14 +34,16 @@ func Render(p input.Portfolio) {
 	}
 	now := time.Now()
 	data := page{
-		Date: now.Format("01-02-2006"),
+		Date: now.Format("Mon Jan _2 15:04:05 2006"),
 		Pretaxes: portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
 			Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
-			Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100},
+			Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100,
+			Cash:       math.Floor(100*p.Pretaxes.Cash) / 100},
 
 		Posttaxes: portfolio{Value: math.Floor(p.Posttaxes.Value*100) / 100,
 			Gain:       math.Floor((p.Posttaxes.Gain)*100) / 100,
-			Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100},
+			Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100,
+			Cash:       math.Floor(100*p.Posttaxes.Cash) / 100},
 	}
 	for _, pos := range p.Positions {
 		if pos.Taxed {

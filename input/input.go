@@ -17,6 +17,7 @@ type summary struct {
 	Value float64
 	Cost  float64
 	Gain  float64
+	Cash  float64
 }
 
 type Position struct {

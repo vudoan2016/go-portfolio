@@ -298,8 +298,17 @@
       "taxed": false
     },
     {
-      "symbol": "cash",
-      "shares": 71781.55,
+      "symbol": "etrade",
+      "shares": 59895.12,
+      "buy date": "03-21-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "fidelity",
+      "shares": 11886.43,
       "buy date": "03-21-2020",
       "purchase price": 1,
       "sale date": "",
@@ -550,8 +559,26 @@
       "taxed": true
     },
     {
-      "symbol": "cash",
-      "shares": 117931.99,
+      "symbol": "vanguard",
+      "shares": 9879.7,
+      "buy date": "03-26-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "merrill",
+      "shares": 25950,
+      "buy date": "03-26-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "etrade",
+      "shares": 85090.61,
       "buy date": "03-26-2020",
       "purchase price": 1,
       "sale date": "",
