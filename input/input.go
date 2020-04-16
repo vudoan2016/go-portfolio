@@ -14,30 +14,32 @@ type Portfolio struct {
 }
 
 type summary struct {
-	Value float64
-	Cost  float64
-	Gain  float64
-	Cash  float64
+	Value      float64
+	Cost       float64
+	Gain       float64
+	Cash       float64
+	Industries map[string]float64
+	Sectors    map[string]float64
 }
 
 type Position struct {
-	Ticker                     string  `json:"symbol"`
-	Shares                     float64 `json:"shares"`
-	BuyDate                    string  `json:"buy date"`
-	BuyPrice                   float64 `json:"purchase price"`
-	SaleDate                   string  `json:"sale date"`
-	SalePrice                  float64 `json:"sale price"`
-	Taxed                      bool    `json:taxed`
-	Name                       string
-	Price                      float64
-	Value                      float64
-	Weight                     float64
-	Cost                       float64
-	Gain                       float64
-	Percentage                 float64
-	ForwardPE                  float64
-	ForwardEPS                 float64
-	TrailingAnnualDividendRate float64
+	Ticker                      string  `json:"symbol"`
+	Shares                      float64 `json:"shares"`
+	BuyDate                     string  `json:"buy date"`
+	BuyPrice                    float64 `json:"purchase price"`
+	SaleDate                    string  `json:"sale date"`
+	SalePrice                   float64 `json:"sale price"`
+	Taxed                       bool    `json:taxed`
+	Name                        string
+	Price                       float64
+	Value                       float64
+	Weight                      float64
+	Cost                        float64
+	Gain                        float64
+	Percentage                  float64
+	ForwardPE                   float64
+	ForwardEPS                  float64
+	TrailingAnnualDividendYield float64
 }
 
 // Get portfolio from a json file

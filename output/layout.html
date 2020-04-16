@@ -12,44 +12,36 @@
 
       function createData(positions) {
         var array = [];
-        var header = ["Symbol", "Weight"];
+        var header = ["Name", "Weight"];
         array.push(header);
 
         for (var i = 0; i < positions.length; i++) {
           var row = [];
-          row.push(positions[i].symbol);
+          row.push(positions[i].Name);
           row.push(positions[i].Weight);
           array.push(row);
         }
         var data = google.visualization.arrayToDataTable(array);
-        return data
+        return data;
+      }
+
+      function drawOneChart(title, id, data) {
+        var options = {
+          title: title
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById(id)
+        );
+
+        chart.draw(data, options);
       }
 
       function drawChart() {
-        var pretaxPositions = {{ .Pretaxes.Positions }}; // pretax positions
-        var posttaxPositions = {{ .Posttaxes.Positions }}; // posttax positions
-        var pretaxData = createData(pretaxPositions)
-        var posttaxData = createData(posttaxPositions)
-
-        var options = {
-          title: "Before Tax Components"
-        };
-
-        var chart = new google.visualization.PieChart(
-          document.getElementById("preTaxHoldings")
-        );
-
-        chart.draw(pretaxData, options);
-
-        options = {
-          title: "After Tax Components"
-        };
-
-        var chart = new google.visualization.PieChart(
-          document.getElementById("postTaxHoldings")
-        );
-
-        chart.draw(posttaxData, options);
+        drawOneChart("Before Tax Components", "preTaxHoldings", createData({{ .Pretaxes.Positions }}));
+        drawOneChart("After Tax Components", "postTaxHoldings", createData({{ .Posttaxes.Positions }}));
+        drawOneChart("Before Tax Sectors", "preTaxSectors", createData({{ .Pretaxes.Sectors }}));
+        drawOneChart("After Tax Sectors", "postTaxSectors", createData({{ .Posttaxes.Sectors }}));
       }
     </script>
   </head>
@@ -72,11 +64,13 @@
         <th>Sale Date</th>
         <th>Forward PE</th>
         <th>Forward EPS</th>
-        <th>Trailing Annual Dividend Rate</th>
+        <th>Trailing Annual Dividend Yield</th>
       </tr>
       {{ range .Pretaxes.Positions}}
       <tr>
-        <td>{{ .Name }}</td>
+        <td>
+          <a href="https://finance.yahoo.com/quote/{{.Ticker}}">{{ .Name }}</a>
+        </td>
         <td>{{ .Price }}</td>
         <td>{{ .Value }}</td>
         <td>{{ .Weight }}</td>
@@ -93,12 +87,22 @@
         <td>{{ .SaleDate }}</td>
         <td>{{ .ForwardPE }}</td>
         <td>{{ .ForwardEPS }}</td>
-        <td>{{ .TrailingAnnualDividendRate }}</td>
+        <td>{{ .TrailingAnnualDividendYield }}</td>
       </tr>
       {{end}}
     </table>
 
-    <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
+    <table class="columns">
+      <tr>
+        <td>
+          <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
+        </td>
+        <td>
+          <div id="preTaxSectors" style="width: 900px; height: 500px;"></div>
+        </td>
+      </tr>
+    </table>
+
     <b
       >Market value: {{.Pretaxes.Value}} Gain:
       {{.Pretaxes.Gain}}({{.Pretaxes.Percentage}}%) Cash: {{.Pretaxes.Cash}}
@@ -122,11 +126,13 @@
         <th>Sale Date</th>
         <th>Forward PE</th>
         <th>Forward EPS</th>
-        <th>Trailing Annual Dividend Rate</th>
+        <th>Trailing Annual Dividend Yield</th>
       </tr>
       {{ range .Posttaxes.Positions}}
       <tr>
-        <td>{{ .Name }}</td>
+        <td>
+          <a href="https://finance.yahoo.com/quote/{{.Ticker}}">{{ .Name }}</a>
+        </td>
         <td>{{ .Price }}</td>
         <td>{{ .Value }}</td>
         <td>{{ .Weight }}</td>
@@ -143,12 +149,22 @@
         <td>{{ .SaleDate }}</td>
         <td>{{ .ForwardPE }}</td>
         <td>{{ .ForwardEPS }}</td>
-        <td>{{ .TrailingAnnualDividendRate }}</td>
+        <td>{{ .TrailingAnnualDividendYield }}</td>
       </tr>
       {{ end}}
     </table>
 
-    <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
+    <table class="columns">
+      <tr>
+        <td>
+          <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
+        </td>
+        <td>
+          <div id="postTaxSectors" style="width: 900px; height: 500px;"></div>
+        </td>
+      </tr>
+    </table>
+
     <b
       >Market value: {{.Posttaxes.Value}} Gain:
       {{.Posttaxes.Gain}}({{.Posttaxes.Percentage}}%) Cash: {{.Posttaxes.Cash}}

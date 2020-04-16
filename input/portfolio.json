@@ -101,7 +101,7 @@
     },
     {
       "symbol": "vinix",
-      "shares": 130.189,
+      "shares": 138.082,
       "buy date": "02-20-2018",
       "purchase price": 303.81,
       "sale date": "",
@@ -110,7 +110,7 @@
     },
     {
       "symbol": "vinix",
-      "shares": 34.175,
+      "shares": 36.998,
       "buy date": "02-20-2018",
       "purchase price": 303.81,
       "sale date": "",
@@ -298,9 +298,45 @@
       "taxed": false
     },
     {
+      "symbol": "tsn",
+      "shares": 162,
+      "buy date": "04-15-2020",
+      "purchase price": 60,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "aig",
+      "shares": 461,
+      "buy date": "04-14-2020",
+      "purchase price": 25.5,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "seegx",
+      "shares": 161.652,
+      "buy date": "02-24-2020",
+      "purchase price": 43.16,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "sflnx",
+      "shares": 193.762,
+      "buy date": "11-13-2018",
+      "purchase price": 17.57,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
       "symbol": "etrade",
-      "shares": 59895.12,
-      "buy date": "03-21-2020",
+      "shares": 50175.12,
+      "buy date": "04-15-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,
@@ -308,8 +344,17 @@
     },
     {
       "symbol": "fidelity",
-      "shares": 11886.43,
+      "shares": 130.93,
       "buy date": "03-21-2020",
+      "purchase price": 1,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "payflex",
+      "shares": 1090.38,
+      "buy date": "04-10-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,
@@ -558,10 +603,21 @@
       "sale price": 0,
       "taxed": true
     },
+
+    {
+      "symbol": "syk",
+      "shares": 57,
+      "buy date": "04-13-2020",
+      "purchase price": 172.16,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+
     {
       "symbol": "vanguard",
-      "shares": 9879.7,
-      "buy date": "03-26-2020",
+      "shares": 66.58,
+      "buy date": "04-13-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,
@@ -578,7 +634,7 @@
     },
     {
       "symbol": "etrade",
-      "shares": 85090.61,
+      "shares": 87730.71,
       "buy date": "03-26-2020",
       "purchase price": 1,
       "sale date": "",

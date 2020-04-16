@@ -19,10 +19,16 @@ type page struct {
 
 type portfolio struct {
 	Positions  []input.Position
+	Sectors    []sector
 	Value      float64 // market value of portfolio
 	Gain       float64 // overall gain
 	Percentage float64 // gain percentage
 	Cash       float64 // cash available
+}
+
+type sector struct {
+	Name   string
+	Weight float64
 }
 
 // Render formats the data & writes it to a html file
@@ -45,12 +51,20 @@ func Render(p input.Portfolio) {
 			Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100,
 			Cash:       math.Floor(100*p.Posttaxes.Cash) / 100},
 	}
+
 	for _, pos := range p.Positions {
 		if pos.Taxed {
 			data.Posttaxes.Positions = append(data.Posttaxes.Positions, pos)
 		} else {
 			data.Pretaxes.Positions = append(data.Pretaxes.Positions, pos)
 		}
+	}
+	for key, value := range p.Posttaxes.Sectors {
+		data.Posttaxes.Sectors = append(data.Posttaxes.Sectors, sector{Name: key, Weight: value})
+	}
+
+	for key, value := range p.Pretaxes.Sectors {
+		data.Pretaxes.Sectors = append(data.Pretaxes.Sectors, sector{Name: key, Weight: value})
 	}
 
 	t, er := template.ParseFiles("output/layout.html")

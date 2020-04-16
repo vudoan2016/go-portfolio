@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/vudoan2016/portfolio/analysis"
 	"github.com/vudoan2016/portfolio/input"
@@ -24,8 +25,12 @@ func main() {
 	}
 
 	symbols := input.Get(file)
+	start := time.Now()
 	analysis.Analyze(&symbols)
+	log.Println("Analyze() takes", time.Since(start))
+	start = time.Now()
 	output.Render(symbols)
+	log.Println("Render() takes", time.Since(start))
 }
 
 // Find file in current directory and level-1 subdirectories
