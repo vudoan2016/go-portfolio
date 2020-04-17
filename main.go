@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/vudoan2016/portfolio/analysis"
 	"github.com/vudoan2016/portfolio/input"
@@ -14,6 +13,13 @@ import (
 )
 
 func main() {
+	logger, err := os.OpenFile("info.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logger.Close()
+	log.SetOutput(logger)
+
 	var file = "portfolio.json"
 	if len(os.Args) < 2 {
 		file = find(file)
@@ -25,12 +31,8 @@ func main() {
 	}
 
 	symbols := input.Get(file)
-	start := time.Now()
 	analysis.Analyze(&symbols)
-	log.Println("Analyze() takes", time.Since(start))
-	start = time.Now()
 	output.Render(symbols)
-	log.Println("Render() takes", time.Since(start))
 }
 
 // Find file in current directory and level-1 subdirectories

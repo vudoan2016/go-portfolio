@@ -4,7 +4,9 @@ import (
 	"log"
 	"math"
 	"sort"
+	"time"
 
+	"github.com/piquette/finance-go"
 	"github.com/piquette/finance-go/equity"
 	"github.com/vudoan2016/portfolio/financialmodelingprep"
 	"github.com/vudoan2016/portfolio/input"
@@ -12,51 +14,31 @@ import (
 
 const (
 	mutualFundETF = "Mutual fund/ETF"
-	cash          = "cash"
+	cash          = "Cash"
 )
-
-func getFinancial(pos *input.Position) {
-	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
-		pos.Name = pos.Ticker
-		pos.Price = pos.BuyPrice
-	} else {
-		equity, err := equity.Get(pos.Ticker)
-
-		if err != nil {
-			log.Println(pos.Ticker, err)
-		} else {
-			pos.Name = equity.ShortName
-			pos.Price = equity.RegularMarketPrice
-			pos.ForwardPE = equity.ForwardPE
-			pos.ForwardEPS = equity.EpsForward
-			pos.TrailingAnnualDividendYield = equity.TrailingAnnualDividendYield
-		}
-	}
-}
 
 // Analyze calculates the portfolio's performance
 func Analyze(portfolio *input.Portfolio) {
 	portfolio.Posttaxes.Sectors = make(map[string]float64)
 	portfolio.Pretaxes.Sectors = make(map[string]float64)
 
-	for i, pos := range portfolio.Positions {
-		getFinancial(&portfolio.Positions[i])
-		var company financialmodelingprep.Company
-		if portfolio.Positions[i].Ticker != "fidelity" && portfolio.Positions[i].Ticker != "vanguard" &&
-			portfolio.Positions[i].Ticker != "etrade" && portfolio.Positions[i].Ticker != "merrill" &&
-			portfolio.Positions[i].Ticker != "vinix" && portfolio.Positions[i].Ticker != "sdscx" &&
-			portfolio.Positions[i].Ticker != "seegx" && portfolio.Positions[i].Ticker != "sflnx" {
-			company = financialmodelingprep.GetProfile(portfolio.Positions[i].Ticker)
-		}
+	start := time.Now()
+	profiles := getProfiles(portfolio.Positions)
+	log.Println("getProfiles() takes", time.Since(start))
 
+	start = time.Now()
+	getFinancial(portfolio.Positions)
+	log.Println("getFinancial() takes", time.Since(start))
+
+	for i, pos := range portfolio.Positions {
 		if pos.SaleDate == "" {
 			portfolio.Positions[i].Value = portfolio.Positions[i].Price * portfolio.Positions[i].Shares
 			portfolio.Positions[i].Cost = portfolio.Positions[i].BuyPrice * portfolio.Positions[i].Shares
 			portfolio.Positions[i].Gain = (portfolio.Positions[i].Price - portfolio.Positions[i].BuyPrice) * portfolio.Positions[i].Shares
 			if pos.Taxed {
 				portfolio.Posttaxes.Value += portfolio.Positions[i].Value
-				if len(company.P.Sector) > 0 {
-					portfolio.Posttaxes.Sectors[company.P.Sector] += portfolio.Positions[i].Value
+				if len(profiles[pos.Ticker].P.Sector) > 0 {
+					portfolio.Posttaxes.Sectors[profiles[pos.Ticker].P.Sector] += portfolio.Positions[i].Value
 				} else {
 					if portfolio.Positions[i].Ticker != "fidelity" && portfolio.Positions[i].Ticker != "vanguard" &&
 						portfolio.Positions[i].Ticker != "etrade" && portfolio.Positions[i].Ticker != "merrill" {
@@ -67,8 +49,8 @@ func Analyze(portfolio *input.Portfolio) {
 				}
 			} else {
 				portfolio.Pretaxes.Value += portfolio.Positions[i].Value
-				if len(company.P.Sector) > 0 {
-					portfolio.Pretaxes.Sectors[company.P.Sector] += portfolio.Positions[i].Value
+				if len(profiles[pos.Ticker].P.Sector) > 0 {
+					portfolio.Pretaxes.Sectors[profiles[pos.Ticker].P.Sector] += portfolio.Positions[i].Value
 				} else {
 					if portfolio.Positions[i].Ticker != "fidelity" && portfolio.Positions[i].Ticker != "vanguard" &&
 						portfolio.Positions[i].Ticker != "etrade" && portfolio.Positions[i].Ticker != "merrill" {
@@ -120,6 +102,52 @@ func Analyze(portfolio *input.Portfolio) {
 		}
 	}
 	sortPositionsByWeight(portfolio.Positions)
+}
+
+func getFinancial(positions []input.Position) {
+	equities := make(map[string]*finance.Equity)
+	var e *finance.Equity = nil
+
+	for index, pos := range positions {
+		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
+			positions[index].Name = pos.Ticker
+			positions[index].Price = pos.BuyPrice
+		} else {
+			// Haven't looked up yet
+			var exist bool
+			if e, exist = equities[pos.Ticker]; !exist {
+				var err error
+				e, err = equity.Get(pos.Ticker)
+				if err != nil {
+					log.Println(pos.Ticker, err)
+				} else {
+					equities[pos.Ticker] = e
+				}
+			}
+			positions[index].Name = e.ShortName
+			positions[index].Price = e.RegularMarketPrice
+			positions[index].ForwardPE = e.ForwardPE
+			positions[index].ForwardEPS = e.EpsForward
+			positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
+		}
+	}
+}
+
+func getProfiles(positions []input.Position) map[string]financialmodelingprep.Company {
+	profiles := make(map[string]financialmodelingprep.Company)
+
+	for _, pos := range positions {
+		if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
+			pos.Ticker != "etrade" && pos.Ticker != "merrill" && pos.Ticker != "payflex" &&
+			pos.Ticker != "vinix" && pos.Ticker != "sdscx" &&
+			pos.Ticker != "seegx" && pos.Ticker != "sflnx" &&
+			pos.SaleDate == "" {
+			if _, exist := profiles[pos.Ticker]; !exist {
+				profiles[pos.Ticker] = financialmodelingprep.GetProfile(pos.Ticker)
+			}
+		}
+	}
+	return profiles
 }
 
 type positions []input.Position

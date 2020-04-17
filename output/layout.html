@@ -38,10 +38,10 @@
       }
 
       function drawChart() {
-        drawOneChart("Before Tax Components", "preTaxHoldings", createData({{ .Pretaxes.Positions }}));
-        drawOneChart("After Tax Components", "postTaxHoldings", createData({{ .Posttaxes.Positions }}));
-        drawOneChart("Before Tax Sectors", "preTaxSectors", createData({{ .Pretaxes.Sectors }}));
-        drawOneChart("After Tax Sectors", "postTaxSectors", createData({{ .Posttaxes.Sectors }}));
+        drawOneChart("Components", "preTaxHoldings", createData({{ .Pretaxes.Positions }}));
+        drawOneChart("Components", "postTaxHoldings", createData({{ .Posttaxes.Positions }}));
+        drawOneChart("Sectors", "preTaxSectors", createData({{ .Pretaxes.Sectors }}));
+        drawOneChart("Sectors", "postTaxSectors", createData({{ .Posttaxes.Sectors }}));
       }
     </script>
   </head>
