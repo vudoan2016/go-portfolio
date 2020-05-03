@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,6 +34,9 @@ func main() {
 	symbols := input.Get(file)
 	analysis.Analyze(&symbols)
 	output.Render(symbols)
+
+	http.HandleFunc("/", output.Respond)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 // Find file in current directory and level-1 subdirectories

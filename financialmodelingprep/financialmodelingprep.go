@@ -23,18 +23,21 @@ type profile struct {
 
 // GetProfile returns key data of a company
 func GetProfile(symbol string) Company {
+	var c Company
+
 	response, err := http.Get(profileURL + symbol)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return c
 	}
 	defer response.Body.Close()
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return c
 	}
 
-	var c Company
 	err = json.Unmarshal(responseData, &c)
 	if err != nil {
 		log.Println("Failed to unmarshal response")

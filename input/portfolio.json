@@ -119,9 +119,18 @@
     },
     {
       "symbol": "csco",
-      "shares": 1008.421,
+      "shares": 1000,
       "buy date": "05-15-2019",
       "purchase price": 52.39,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
+      "symbol": "csco",
+      "shares": 8.421,
+      "buy date": "04-20-2020",
+      "purchase price": 0,
       "sale date": "",
       "sale price": 0,
       "taxed": false
@@ -334,9 +343,18 @@
       "taxed": false
     },
     {
+      "symbol": "hon",
+      "shares": 70,
+      "buy date": "04-30-2020",
+      "purchase price": 141,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": false
+    },
+    {
       "symbol": "etrade",
-      "shares": 50219.1,
-      "buy date": "04-24-2020",
+      "shares": 40349.1,
+      "buy date": "04-30-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,
@@ -365,6 +383,15 @@
       "shares": 538.822,
       "buy date": "11-7-2017",
       "purchase price": 96.93,
+      "sale date": "",
+      "sale price": 0,
+      "taxed": true
+    },
+    {
+      "symbol": "vig",
+      "shares": 2.436,
+      "buy date": "3-31-2020",
+      "purchase price": 0,
       "sale date": "",
       "sale price": 0,
       "taxed": true
@@ -616,8 +643,8 @@
 
     {
       "symbol": "vanguard",
-      "shares": 66.58,
-      "buy date": "04-13-2020",
+      "shares": 128.3,
+      "buy date": "04-28-2020",
       "purchase price": 1,
       "sale date": "",
       "sale price": 0,

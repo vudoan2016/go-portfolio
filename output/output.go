@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"log"
 	"math"
-	"os"
+	"net/http"
 	"time"
 
 	"github.com/vudoan2016/portfolio/input"
@@ -31,15 +31,12 @@ type sector struct {
 	Weight float64
 }
 
+var data page
+
 // Render formats the data & writes it to a html file
 func Render(p input.Portfolio) {
-	output, err := os.Create("portfolio.html")
-	if err != nil {
-		log.Println(err)
-		return
-	}
 	now := time.Now()
-	data := page{
+	data = page{
 		Date: now.Format("Mon Jan _2 15:04:05 2006"),
 		Pretaxes: portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
 			Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
@@ -66,13 +63,19 @@ func Render(p input.Portfolio) {
 	for key, value := range p.Pretaxes.Sectors {
 		data.Pretaxes.Sectors = append(data.Pretaxes.Sectors, sector{Name: key, Weight: value})
 	}
+}
 
-	t, er := template.ParseFiles("output/layout.html")
-	if er != nil {
-		fmt.Println(er)
+func Respond(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("output/layout.html")
+	if err != nil {
+		fmt.Println(err)
 	} else {
-		tmpl := template.Must(t, er)
-		tmpl.Execute(output, data)
+		tmpl := template.Must(t, err)
+		err = tmpl.Execute(w, data)
+		if err != nil {
+			log.Println("Executed template with error", err)
+
+		}
+
 	}
-	output.Close()
 }

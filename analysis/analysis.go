@@ -90,6 +90,7 @@ func Analyze(portfolio *input.Portfolio) {
 	for i, pos := range portfolio.Positions {
 		portfolio.Positions[i].Percentage = math.Floor(100*pos.Gain/pos.Cost*100) / 100
 		// 2 trailing digits
+		portfolio.Positions[i].BuyPrice = math.Floor(100*portfolio.Positions[i].Cost/portfolio.Positions[i].Shares) / 100
 		portfolio.Positions[i].ForwardPE = math.Floor(100*portfolio.Positions[i].ForwardPE) / 100
 		portfolio.Positions[i].Value = math.Floor(100*portfolio.Positions[i].Value) / 100
 		portfolio.Positions[i].Gain = math.Floor(100*portfolio.Positions[i].Gain) / 100
@@ -113,10 +114,11 @@ func getFinancial(positions []input.Position) {
 			positions[index].Name = pos.Ticker
 			positions[index].Price = pos.BuyPrice
 		} else {
-			// Haven't looked up yet
 			var exist bool
+			var err error
+
+			// Haven't looked up yet
 			if e, exist = equities[pos.Ticker]; !exist {
-				var err error
 				e, err = equity.Get(pos.Ticker)
 				if err != nil {
 					log.Println(pos.Ticker, err)
@@ -124,11 +126,13 @@ func getFinancial(positions []input.Position) {
 					equities[pos.Ticker] = e
 				}
 			}
-			positions[index].Name = e.ShortName
-			positions[index].Price = e.RegularMarketPrice
-			positions[index].ForwardPE = e.ForwardPE
-			positions[index].ForwardEPS = e.EpsForward
-			positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
+			if exist || err == nil {
+				positions[index].Name = e.ShortName
+				positions[index].Price = e.RegularMarketPrice
+				positions[index].ForwardPE = e.ForwardPE
+				positions[index].ForwardEPS = e.EpsForward
+				positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
+			}
 		}
 	}
 }
@@ -188,5 +192,6 @@ func consolidate(pos positions) positions {
 			consolidated = append(consolidated, p)
 		}
 	}
+	log.Println(consolidated)
 	return consolidated
 }
