@@ -74,8 +74,6 @@ func Respond(w http.ResponseWriter, r *http.Request) {
 		err = tmpl.Execute(w, data)
 		if err != nil {
 			log.Println("Executed template with error", err)
-
 		}
-
 	}
 }

@@ -25,10 +25,10 @@ type summary struct {
 type Position struct {
 	Ticker                      string  `json:"symbol"`
 	Shares                      float64 `json:"shares"`
-	BuyDate                     string  `json:"buy date"`
-	BuyPrice                    float64 `json:"purchase price"`
-	SaleDate                    string  `json:"sale date"`
-	SalePrice                   float64 `json:"sale price"`
+	BuyDate                     string  `json:"buydate"`
+	BuyPrice                    float64 `json:"purchaseprice"`
+	SaleDate                    string  `json:"saledate"`
+	SalePrice                   float64 `json:"saleprice"`
 	Taxed                       bool    `json:taxed`
 	Name                        string
 	Price                       float64
