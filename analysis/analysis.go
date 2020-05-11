@@ -132,6 +132,8 @@ func getFinancial(positions []input.Position) {
 				positions[index].ForwardPE = e.ForwardPE
 				positions[index].ForwardEPS = e.EpsForward
 				positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
+				positions[index].FiftyDayAverage = e.FiftyDayAverage
+				positions[index].TwoHundredDayAverage = e.TwoHundredDayAverage
 			}
 		}
 	}
@@ -192,6 +194,5 @@ func consolidate(pos positions) positions {
 			consolidated = append(consolidated, p)
 		}
 	}
-	log.Println(consolidated)
 	return consolidated
 }

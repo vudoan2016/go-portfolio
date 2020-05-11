@@ -2,6 +2,47 @@
 <html lang="en">
   <h1>{{.Date}}</h1>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {font-family: Arial;}
+
+      /* Style the tab */
+      .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #11ffee00;
+      }
+
+      /* Style the buttons inside the tab */
+      .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 14px;
+      }
+
+      /* Change background color of buttons on hover */
+      .tab button:hover {
+        background-color: #ddd;
+      }
+
+      /* Create an active/current tablink class */
+      .tab button.active {
+        background-color: #ccc;
+      }
+
+      /* Style the tab content */
+      .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+      }
+    </style>
     <script
       type="text/javascript"
       src="https://www.gstatic.com/charts/loader.js"
@@ -29,7 +70,9 @@
 
       function drawOneChart(title, id, data) {
         var options = {
-          title: title
+          title: title,
+          width:900,
+          height:500
         };
 
         var chart = new google.visualization.PieChart(
@@ -46,98 +89,167 @@
         drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}));
       }
 
-      function createTableData(positions, value, gain, percentage) {
+      function createTableData(positions, active) {
         var array = [];
-        var header = ["Name", "Today", "Value", "Weight", "Gain", "Percentage", "Shares", 
-                      "Purchase Price", "Purchase Date", "Sale Price", "Sale Date", "Forward PE", 
-                      "Forward EPS", "Trailing Annual Dividend Yield"];
+        var header = ["Name", "", "Price", "50-MA", "200-MA", "Value", "Weight", "Gain", "Percentage", "Shares",
+                      "Purchase Price", "Purchase Date", "Sale Price", "Sale Date", "Forward PE",
+                      "Forward EPS", "TTM Yield"];
         array.push(header);
 
         for (var i = 0; i < positions.length; i++) {
-          var row = [];
-          row.push(<a href="https://finance.yahoo.com/quote/positions[i].Name"></a>);
-          row.push(positions[i].Price);
-          row.push(positions[i].Value);
-          row.push(positions[i].Weight);
-          row.push(positions[i].Gain);
-          row.push(positions[i].Percentage);
-          row.push(positions[i].shares); // can't use Shares 
-          row.push(positions[i].purchaseprice);
-          row.push(positions[i].buydate);
-          row.push(positions[i].saleprice);
-          row.push(positions[i].saledate);
-          row.push(positions[i].ForwardPE);
-          row.push(positions[i].ForwardEPS);
-          row.push(positions[i].TrailingAnnualDividendYield);
-          array.push(row);
+          if ((active && positions[i].Value) || (!active && positions[i].Value == 0)) {
+            var row = [];
+
+            row.push(positions[i].Name)
+            row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
+            row.push(positions[i].Price);
+            row.push(positions[i].FiftyDayAverage);
+            row.push(positions[i].TwoHundredDayAverage);
+            row.push(positions[i].Value);
+            row.push(positions[i].Weight);
+            row.push(positions[i].Gain);
+            row.push(positions[i].Percentage);
+            row.push(positions[i].shares); // can't use Shares
+            row.push(positions[i].purchaseprice);
+            row.push(positions[i].buydate);
+            row.push(positions[i].saleprice);
+            row.push(positions[i].saledate);
+            row.push(positions[i].ForwardPE);
+            row.push(positions[i].ForwardEPS);
+            row.push(positions[i].TrailingAnnualDividendYield);
+            array.push(row);
+          }
         }
-        var row = []
-        row.push("Summary");
-        row.push(""); // Price
-        row.push(value);
-        row.push(""); // Weight
-        row.push(gain);
-        row.push(percentage);
-        row.push(0); // shares
-        row.push(0); // purchaseprice
-        row.push("n/a"); // buydate
-        row.push(0); // saleprice
-        row.push("n/a"); // saledate
-        row.push(0); // ForwardPE
-        row.push(0); // ForwardEPS
-        row.push(0); // TrailingAnnualDividendYield
-        array.push(row);
-        
         var data = google.visualization.arrayToDataTable(array);
-        return data
+
+        var formatter = new google.visualization.PatternFormat('<a href="{1}">{0}</a>');
+        // Apply formatter and set the formatted value of the first column.
+        formatter.format(data, [0, 1]);
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); // TODO: Better way to skip 2nd column?
+        return view
       }
 
-      function drawATable(title, id, data) {
+      function createSummaryTableData(value, gain, percentage, cash) {
+        var array = [];
+        array.push(["Value", "Gain", "Percentage", "Cash"]);
+        array.push([value, gain, percentage, cash]);
+
+        var data = google.visualization.arrayToDataTable(array);
+
+        var view = new google.visualization.DataView(data);
+        return view
+      }
+
+      function drawATable(title, id, view, rowNumber) {
         var options = {
           title: title
         };
 
         var table = new google.visualization.Table(document.getElementById(id));
 
-        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+        table.draw(view, {allowHtml: true, showRowNumber: rowNumber, width: '100%', height: '100%'});
       }
 
       function drawTable() {
         var value = {{.Pretaxes.Value}}
         var gain = {{.Pretaxes.Gain}}
         var percentage = {{.Pretaxes.Percentage}}
-        drawATable("Components", "preTaxTable", createTableData({{ .Pretaxes.Positions }}, value, gain, percentage));
+        var cash =  {{.Pretaxes.Cash}}
+        var view = createTableData({{ .Pretaxes.Positions }}, true)
+        var pastView = createTableData({{ .Pretaxes.Positions }}, false)
+        var summaryView = createSummaryTableData(value, gain, percentage, cash)
+        drawATable("Components", "preTaxTable", view, true);
+        drawATable("Components", "Past PreTaxTable", pastView, true);
+        drawATable("Summary", "preTaxSummaryTable", summaryView, false);
 
         value = {{.Posttaxes.Value}}
         gain = {{.Posttaxes.Gain}}
         percentage = {{.Posttaxes.Percentage}}
-        drawATable("Components", "postTaxTable", createTableData({{ .Posttaxes.Positions }}, value, gain, percentage));
+        cash =  {{.Posttaxes.Cash}}
+        view = createTableData({{ .Posttaxes.Positions }}, true)
+        pastView = createTableData({{ .Posttaxes.Positions }}, false)
+        summaryView = createSummaryTableData(value, gain, percentage, cash)
+        drawATable("Components", "postTaxTable", view, true);
+        drawATable("Components", "Past AfterTaxTable", pastView, true);
+        drawATable("Summary", "postTaxSummaryTable", summaryView, false);
+      }
+
+      function openPortfolio(evt, portfolio) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(portfolio).style.display = "block";
+        evt.currentTarget.className += " active";
       }
     </script>
   </head>
   <body>
-    <div id="preTaxTable"></div>
-    <table class="columns">
-      <tr>
-        <td>
-          <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
-        </td>
-        <td>
-          <div id="preTaxSectors" style="width: 900px; height: 500px;"></div>
-        </td>
-      </tr>
-    </table>
+    <!-- Tab links -->
+    <div class="tab">
+      <button class="tablinks" onclick="openPortfolio(event, 'Tax Deferred')" id="defaultOpen">Tax Deferred</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'Post Tax')">After Tax</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'Past Tax-Deferred')">Past Tax-Deferred</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'Past AfterTax')">Past AfterTax</button>
+    </div>
 
-    <div id="postTaxTable"></div>
-    <table class="columns">
-      <tr>
-        <td>
-          <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
-        </td>
-        <td>
-          <div id="postTaxSectors" style="width: 900px; height: 500px;"></div>
-        </td>
-      </tr>
-    </table>
+    <!-- Tab content -->
+    <div id="Tax Deferred" class="tabcontent">
+      <div id="preTaxTable"></div>
+      <br></br>
+      <div id="preTaxSummaryTable"></div>
+      <table class="columns">
+        <tr>
+          <td>
+            <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
+          </td>
+          <td>
+            <div id="preTaxSectors" style="width: 900px; height: 500px;"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="Past Tax-Deferred" class="tabcontent">
+      <div id="Past PreTaxTable"></div>
+    </div>
+
+    <div id="Post Tax" class="tabcontent">
+      <div id="postTaxTable"></div>
+      <br></br>
+      <div id="postTaxSummaryTable"></div>
+      <table class="columns">
+        <tr>
+          <td>
+            <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
+          </td>
+          <td>
+            <div id="postTaxSectors" style="width: 900px; height: 500px;"></div>
+          </td>
+        </tr>
+      </table>
+      </div>
+
+      <div id="Past AfterTax" class="tabcontent">
+        <div id="Past AfterTaxTable"></div>
+      </div>
+  
+      <script>
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+      </script>
   </body>
 </html>

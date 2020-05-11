@@ -40,6 +40,8 @@ type Position struct {
 	ForwardPE                   float64
 	ForwardEPS                  float64
 	TrailingAnnualDividendYield float64
+	FiftyDayAverage             float64
+	TwoHundredDayAverage        float64
 }
 
 // Get portfolio from a json file

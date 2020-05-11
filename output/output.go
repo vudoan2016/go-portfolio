@@ -1,7 +1,6 @@
 package output
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"math"
@@ -13,6 +12,7 @@ import (
 
 type page struct {
 	Date      string
+	t         *template.Template
 	Pretaxes  portfolio
 	Posttaxes portfolio
 }
@@ -33,21 +33,29 @@ type sector struct {
 
 var data page
 
+func Init() {
+	t, err := template.ParseFiles("output/layout.html")
+	if err != nil {
+		log.Println("Failed to parse file", err)
+	} else {
+		data.t = template.Must(t, err)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+}
+
 // Render formats the data & writes it to a html file
 func Render(p input.Portfolio) {
-	now := time.Now()
-	data = page{
-		Date: now.Format("Mon Jan _2 15:04:05 2006"),
-		Pretaxes: portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
-			Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
-			Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100,
-			Cash:       math.Floor(100*p.Pretaxes.Cash) / 100},
-
-		Posttaxes: portfolio{Value: math.Floor(p.Posttaxes.Value*100) / 100,
-			Gain:       math.Floor((p.Posttaxes.Gain)*100) / 100,
-			Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100,
-			Cash:       math.Floor(100*p.Posttaxes.Cash) / 100},
-	}
+	data.Date = time.Now().Format("Mon Jan _2 15:04:05 2006")
+	data.Pretaxes = portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
+		Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
+		Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100,
+		Cash:       math.Floor(100*p.Pretaxes.Cash) / 100}
+	data.Posttaxes = portfolio{Value: math.Floor(p.Posttaxes.Value*100) / 100,
+		Gain:       math.Floor((p.Posttaxes.Gain)*100) / 100,
+		Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100,
+		Cash:       math.Floor(100*p.Posttaxes.Cash) / 100}
 
 	for _, pos := range p.Positions {
 		if pos.Taxed {
@@ -66,12 +74,8 @@ func Render(p input.Portfolio) {
 }
 
 func Respond(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("output/layout.html")
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		tmpl := template.Must(t, err)
-		err = tmpl.Execute(w, data)
+	if data.t != nil {
+		err := data.t.Execute(w, data)
 		if err != nil {
 			log.Println("Executed template with error", err)
 		}

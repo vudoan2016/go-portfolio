@@ -33,6 +33,7 @@ func main() {
 
 	symbols := input.Get(file)
 	analysis.Analyze(&symbols)
+	output.Init()
 	output.Render(symbols)
 
 	http.HandleFunc("/", output.Respond)
