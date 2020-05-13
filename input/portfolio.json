@@ -7,7 +7,7 @@
       "purchaseprice": 172.01,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "msft",
@@ -16,7 +16,7 @@
       "purchaseprice": 93.84,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "msft",
@@ -25,7 +25,7 @@
       "purchaseprice": 92.36,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "msft",
@@ -34,7 +34,7 @@
       "purchaseprice": 83.86,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "amzn",
@@ -43,7 +43,7 @@
       "purchaseprice": 1417.22,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "amzn",
@@ -52,7 +52,7 @@
       "purchaseprice": 1374.82,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "ftnt",
@@ -61,7 +61,7 @@
       "purchaseprice": 61.51,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "nvda",
@@ -70,7 +70,7 @@
       "purchaseprice": 242.72,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "googl",
@@ -79,43 +79,43 @@
       "purchaseprice": 1140.85,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "sdscx",
       "shares": 1334.573,
-      "buydate": "02-20-2020",
-      "purchaseprice": 28.22,
+      "buydate": "06-11-2020",
+      "purchaseprice": 23.59,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "sdscx",
       "shares": 331.31,
-      "buydate": "06-08-2018",
-      "purchaseprice": 23.53,
+      "buydate": "06-11-2018",
+      "purchaseprice": 23.59,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "vinix",
       "shares": 144.039,
-      "buydate": "05-08-2018",
-      "purchaseprice":257.44,
+      "buydate": "02-20-2020",
+      "purchaseprice": 303.81,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "vinix",
       "shares": 38.984,
-      "buydate": "05-08-2018",
-      "purchaseprice": 257.44,
+      "buydate": "02-20-2020",
+      "purchaseprice": 303.81,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "csco",
@@ -124,7 +124,7 @@
       "purchaseprice": 52.39,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "csco",
@@ -133,7 +133,7 @@
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "aapl",
@@ -142,7 +142,7 @@
       "purchaseprice": 174.21,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "abmd",
@@ -151,7 +151,7 @@
       "purchaseprice": 279.86,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "twlo",
@@ -160,7 +160,7 @@
       "purchaseprice": 139.1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "kl",
@@ -169,7 +169,7 @@
       "purchaseprice": 34.81,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "mcd",
@@ -178,7 +178,7 @@
       "purchaseprice": 148.49,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "ibm",
@@ -187,7 +187,7 @@
       "purchaseprice": 95.0,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "ba",
@@ -196,7 +196,7 @@
       "purchaseprice": 95.0,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "abt",
@@ -205,7 +205,7 @@
       "purchaseprice": 70.0,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "blk",
@@ -214,7 +214,7 @@
       "purchaseprice": 556.86,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "blk",
@@ -223,7 +223,7 @@
       "purchaseprice": 532.21,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "br",
@@ -232,7 +232,7 @@
       "purchaseprice": 108.28,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "crm",
@@ -241,7 +241,7 @@
       "purchaseprice": 180.74,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "panw",
@@ -250,7 +250,7 @@
       "purchaseprice": 194.74,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "splk",
@@ -259,7 +259,7 @@
       "purchaseprice": 166.62,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "veev",
@@ -268,7 +268,7 @@
       "purchaseprice": 158.76,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "cprt",
@@ -277,7 +277,7 @@
       "purchaseprice": 97.38,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "tmo",
@@ -286,7 +286,7 @@
       "purchaseprice": 275,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "cost",
@@ -295,7 +295,7 @@
       "purchaseprice": 285,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "tsn",
@@ -304,7 +304,7 @@
       "purchaseprice": 61,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "tsn",
@@ -313,7 +313,7 @@
       "purchaseprice": 60,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "aig",
@@ -322,7 +322,7 @@
       "purchaseprice": 25.5,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "seegx",
@@ -331,7 +331,7 @@
       "purchaseprice": 43.16,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "sflnx",
@@ -340,7 +340,7 @@
       "purchaseprice": 17.57,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "hon",
@@ -349,7 +349,7 @@
       "purchaseprice": 141,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "etrade",
@@ -358,7 +358,7 @@
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "fidelity",
@@ -367,7 +367,7 @@
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "payflex",
@@ -376,7 +376,7 @@
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "vig",
@@ -385,7 +385,7 @@
       "purchaseprice": 96.93,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vig",
@@ -394,7 +394,7 @@
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "brk-b",
@@ -403,7 +403,7 @@
       "purchaseprice": 201.92,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "isrg",
@@ -412,7 +412,7 @@
       "purchaseprice": 483.16,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "amzn",
@@ -421,7 +421,7 @@
       "purchaseprice": 1307.77,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "amzn",
@@ -430,7 +430,7 @@
       "purchaseprice": 1302.67,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -439,7 +439,7 @@
       "purchaseprice": 44.33,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -448,7 +448,7 @@
       "purchaseprice": 29.37,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -457,7 +457,7 @@
       "purchaseprice": 37.92,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -466,7 +466,7 @@
       "purchaseprice": 32.91,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -475,7 +475,7 @@
       "purchaseprice": 18.13,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -484,7 +484,7 @@
       "purchaseprice": 29.37,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -493,7 +493,7 @@
       "purchaseprice": 42.39,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -502,7 +502,7 @@
       "purchaseprice": 39.58,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -511,7 +511,7 @@
       "purchaseprice": 30.99,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "cien",
@@ -520,7 +520,7 @@
       "purchaseprice": 36.07,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "v",
@@ -529,7 +529,7 @@
       "purchaseprice": 199.62,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "jpm",
@@ -538,7 +538,16 @@
       "purchaseprice": 132.41,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
+    },
+    {
+      "symbol": "jpm",
+      "shares": 114,
+      "buydate": "05-12-2020",
+      "purchaseprice": 87.0387,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
     },
     {
       "symbol": "c",
@@ -547,7 +556,7 @@
       "purchaseprice": 72.53,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "ma",
@@ -556,7 +565,7 @@
       "purchaseprice": 303.57,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "ma",
@@ -565,7 +574,7 @@
       "purchaseprice": 325.83,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "nke",
@@ -574,7 +583,7 @@
       "purchaseprice": 70,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "ctas",
@@ -583,7 +592,7 @@
       "purchaseprice": 175,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "wm",
@@ -592,7 +601,7 @@
       "purchaseprice": 98,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "wm",
@@ -601,7 +610,7 @@
       "purchaseprice": 100,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "aapl",
@@ -610,7 +619,7 @@
       "purchaseprice": 245,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "googl",
@@ -619,7 +628,7 @@
       "purchaseprice": 1100,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "dal",
@@ -628,7 +637,7 @@
       "purchaseprice": 30,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "sbux",
@@ -637,9 +646,8 @@
       "purchaseprice": 66,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
-
     {
       "symbol": "syk",
       "shares": 57,
@@ -647,9 +655,17 @@
       "purchaseprice": 172.16,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
-
+    {
+      "symbol": "skx",
+      "shares": 195,
+      "buydate": "05-12-2020",
+      "purchaseprice": 26.075,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
     {
       "symbol": "vanguard",
       "shares": 128.3,
@@ -657,25 +673,25 @@
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "merrill",
-      "shares": 15950,
-      "buydate": "03-26-2020",
+      "shares": 10865.375,
+      "buydate": "05-12-2020",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "etrade",
-      "shares": 88773.9,
-      "buydate": "04-24-2020",
+      "shares": 78851.4882,
+      "buydate": "05-12-2020",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "veev",
@@ -684,7 +700,7 @@
       "purchaseprice": 79.56,
       "saledate": "08-23-2018",
       "saleprice": 89.6653,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "fb",
@@ -693,7 +709,7 @@
       "purchaseprice": 190.895,
       "saledate": "07-25-2018",
       "saleprice": 218.5,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "pypl",
@@ -702,7 +718,7 @@
       "purchaseprice": 84.39,
       "saledate": "08-23-2018",
       "saleprice": 87.3222,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "hd",
@@ -711,7 +727,7 @@
       "purchaseprice": 205.32,
       "saledate": "09-04-2018",
       "saleprice": 205.3,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "v",
@@ -720,7 +736,7 @@
       "purchaseprice": 112.31,
       "saledate": "07-27-2018",
       "saleprice": 141.855,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "pogrx",
@@ -729,7 +745,7 @@
       "purchaseprice": 40.81,
       "saledate": "07-12-2018",
       "saleprice": 41.3,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "rth",
@@ -738,7 +754,7 @@
       "purchaseprice": 103.435,
       "saledate": "02-28-2018",
       "saleprice": 95.2314,
-      "taxed": false
+      "type": "deferred"
     },
     {
       "symbol": "rth",
@@ -747,7 +763,7 @@
       "purchaseprice": 98.26,
       "saledate": "02-28-2018",
       "saleprice": 98.51,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "pogrx",
@@ -756,7 +772,7 @@
       "purchaseprice": 39.93,
       "saledate": "03-08-2018",
       "saleprice": 41.32,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "newr",
@@ -765,7 +781,7 @@
       "purchaseprice": 105.59,
       "saledate": "02-26-2019",
       "saleprice": 106,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vti",
@@ -774,7 +790,7 @@
       "purchaseprice": 133.16,
       "saledate": "03-29-2018",
       "saleprice": 136.19,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vug",
@@ -783,7 +799,7 @@
       "purchaseprice": 139.72,
       "saledate": "04-30-2018",
       "saleprice": 142.54,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vug",
@@ -792,7 +808,7 @@
       "purchaseprice": 135.42,
       "saledate": "04-30-2018",
       "saleprice": 142.54,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vbiax",
@@ -801,7 +817,7 @@
       "purchaseprice": 33.53,
       "saledate": "01-17-2018",
       "saleprice": 35.43,
-      "taxed": true
+      "type": "taxed"
     },
     {
       "symbol": "vbiax",
@@ -810,7 +826,88 @@
       "purchaseprice": 34.52,
       "saledate": "01-17-2018",
       "saleprice": 35.43,
-      "taxed": true
+      "type": "taxed"
+    },
+    {
+      "symbol": "adbe",
+      "shares": 202,
+      "buydate": "06-07-2018",
+      "purchaseprice": 246.51,
+      "saledate": "11-28-2018",
+      "saleprice": 247.34,
+      "type": "taxed"
+    },
+    {
+      "symbol": "adbe",
+      "shares": 202,
+      "buydate": "06-07-2018",
+      "purchaseprice": 246.51,
+      "saledate": "11-28-2018",
+      "saleprice": 247.34,
+      "type": "taxed"
+    },
+    {
+      "symbol": "dri",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 73.93,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "msi",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 130.14,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "dis",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 107.77,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "met",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 33.97,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "sna",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 124.84,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "hlt",
+      "shares": 0,
+      "buydate": "05-11-2020",
+      "purchaseprice": 68.3,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "mdt",
+      "shares": 0,
+      "buydate": "05-10-2020",
+      "purchaseprice": 99.03,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
     }
   ]
 }

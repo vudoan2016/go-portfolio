@@ -5,19 +5,22 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/piquette/finance-go"
 )
 
 type Portfolio struct {
 	Positions []Position `json:"companies"`
-	Pretaxes  summary
-	Posttaxes summary
+	Pretaxes  Summary
+	Posttaxes Summary
 }
 
-type summary struct {
+type Summary struct {
 	Value      float64
 	Cost       float64
 	Gain       float64
 	Cash       float64
+	TodayGain  float64
 	Industries map[string]float64
 	Sectors    map[string]float64
 }
@@ -29,7 +32,7 @@ type Position struct {
 	BuyPrice                    float64 `json:"purchaseprice"`
 	SaleDate                    string  `json:"saledate"`
 	SalePrice                   float64 `json:"saleprice"`
-	Taxed                       bool    `json:taxed`
+	Type                        string  `json:"type"`
 	Name                        string
 	Price                       float64
 	Value                       float64
@@ -42,6 +45,10 @@ type Position struct {
 	TrailingAnnualDividendYield float64
 	FiftyDayAverage             float64
 	TwoHundredDayAverage        float64
+	RegularMarketChangePercent  float64
+	EarningsTimestamp           string
+	MarketState                 finance.MarketState
+	QuoteType                   finance.QuoteType
 }
 
 // Get portfolio from a json file

@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"log"
-	"math"
 	"sort"
 	"time"
 
@@ -19,96 +18,123 @@ const (
 
 // Analyze calculates the portfolio's performance
 func Analyze(portfolio *input.Portfolio) {
+	// Combine into one?
 	portfolio.Posttaxes.Sectors = make(map[string]float64)
 	portfolio.Pretaxes.Sectors = make(map[string]float64)
 
-	start := time.Now()
+	// Todo: cache
 	profiles := getProfiles(portfolio.Positions)
-	log.Println("getProfiles() takes", time.Since(start))
-
-	start = time.Now()
 	getFinancial(portfolio.Positions)
-	log.Println("getFinancial() takes", time.Since(start))
 
 	for i, pos := range portfolio.Positions {
-		if pos.SaleDate == "" {
-			portfolio.Positions[i].Value = portfolio.Positions[i].Price * portfolio.Positions[i].Shares
-			portfolio.Positions[i].Cost = portfolio.Positions[i].BuyPrice * portfolio.Positions[i].Shares
-			portfolio.Positions[i].Gain = (portfolio.Positions[i].Price - portfolio.Positions[i].BuyPrice) * portfolio.Positions[i].Shares
-			if pos.Taxed {
-				portfolio.Posttaxes.Value += portfolio.Positions[i].Value
-				if len(profiles[pos.Ticker].P.Sector) > 0 {
-					portfolio.Posttaxes.Sectors[profiles[pos.Ticker].P.Sector] += portfolio.Positions[i].Value
-				} else {
-					if portfolio.Positions[i].Ticker != "fidelity" && portfolio.Positions[i].Ticker != "vanguard" &&
-						portfolio.Positions[i].Ticker != "etrade" && portfolio.Positions[i].Ticker != "merrill" {
-						portfolio.Posttaxes.Sectors[mutualFundETF] += portfolio.Positions[i].Value
-					} else {
-						portfolio.Posttaxes.Sectors[cash] += portfolio.Positions[i].Value
-					}
-				}
-			} else {
-				portfolio.Pretaxes.Value += portfolio.Positions[i].Value
-				if len(profiles[pos.Ticker].P.Sector) > 0 {
-					portfolio.Pretaxes.Sectors[profiles[pos.Ticker].P.Sector] += portfolio.Positions[i].Value
-				} else {
-					if portfolio.Positions[i].Ticker != "fidelity" && portfolio.Positions[i].Ticker != "vanguard" &&
-						portfolio.Positions[i].Ticker != "etrade" && portfolio.Positions[i].Ticker != "merrill" {
-						portfolio.Pretaxes.Sectors[mutualFundETF] += portfolio.Positions[i].Value
-					} else {
-						portfolio.Pretaxes.Sectors[cash] += portfolio.Positions[i].Value
-					}
-				}
-			}
-		} else {
-			portfolio.Positions[i].Cost = portfolio.Positions[i].BuyPrice * portfolio.Positions[i].Shares
-			portfolio.Positions[i].Gain = (portfolio.Positions[i].SalePrice - portfolio.Positions[i].BuyPrice) * portfolio.Positions[i].Shares
-		}
-		if portfolio.Positions[i].Taxed {
-			portfolio.Posttaxes.Cost += portfolio.Positions[i].Cost
-			portfolio.Posttaxes.Gain += portfolio.Positions[i].Gain
-			if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
-				portfolio.Posttaxes.Cash += portfolio.Positions[i].Value
-			}
-		} else {
-			portfolio.Pretaxes.Cost += portfolio.Positions[i].Cost
-			portfolio.Pretaxes.Gain += portfolio.Positions[i].Gain
-			if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
-				portfolio.Pretaxes.Cash += portfolio.Positions[i].Value
-			}
-		}
-	}
-	for sector := range portfolio.Posttaxes.Sectors {
-		portfolio.Posttaxes.Sectors[sector] = math.Floor(100*100*portfolio.Posttaxes.Sectors[sector]/portfolio.Posttaxes.Value) / 100
+		// Populate holding's financial data
+		populatePosition(&portfolio.Positions[i])
+
+		// Reflect on sector distribution
+		reflectSectorDist(portfolio.Positions[i], profiles[pos.Ticker].P.Sector, portfolio)
+
+		// Update portfolios
+		updateSubPortfolio(portfolio, portfolio.Positions[i])
 	}
 
-	for sector := range portfolio.Pretaxes.Sectors {
-		portfolio.Pretaxes.Sectors[sector] = math.Floor(100*100*portfolio.Pretaxes.Sectors[sector]/portfolio.Pretaxes.Value) / 100
+	// Summarize posttaxed sectors
+	for sector := range portfolio.Posttaxes.Sectors {
+		portfolio.Posttaxes.Sectors[sector] = 100 * portfolio.Posttaxes.Sectors[sector] / portfolio.Posttaxes.Value
 	}
+
+	// Summarize pretaxed sectors
+	for sector := range portfolio.Pretaxes.Sectors {
+		portfolio.Pretaxes.Sectors[sector] = 100 * portfolio.Pretaxes.Sectors[sector] / portfolio.Pretaxes.Value
+	}
+
+	// Consolidate equity's holdings into one
 	portfolio.Positions = consolidate(portfolio.Positions)
 
-	for i, pos := range portfolio.Positions {
-		portfolio.Positions[i].Percentage = math.Floor(100*pos.Gain/pos.Cost*100) / 100
-		// 2 trailing digits
-		portfolio.Positions[i].BuyPrice = math.Floor(100*portfolio.Positions[i].Cost/portfolio.Positions[i].Shares) / 100
-		portfolio.Positions[i].ForwardPE = math.Floor(100*portfolio.Positions[i].ForwardPE) / 100
-		portfolio.Positions[i].Value = math.Floor(100*portfolio.Positions[i].Value) / 100
-		portfolio.Positions[i].Gain = math.Floor(100*portfolio.Positions[i].Gain) / 100
-		portfolio.Positions[i].Shares = math.Floor(100*portfolio.Positions[i].Shares) / 100
-		portfolio.Positions[i].TrailingAnnualDividendYield = math.Floor(100*100*portfolio.Positions[i].TrailingAnnualDividendYield) / 100
-		if pos.Taxed {
-			portfolio.Positions[i].Weight = math.Floor(100*pos.Value/portfolio.Posttaxes.Value*100) / 100
+	// The sub-portfolios are populated. Weigh the equities.
+	for i := range portfolio.Positions {
+		weighEquity(portfolio, &portfolio.Positions[i])
+	}
+
+	sortPositionsByWeight(portfolio.Positions)
+}
+
+// populatePosition populate value, cost & gain for each position
+func populatePosition(pos *input.Position) {
+	// Active holding
+	if pos.SaleDate == "" {
+		pos.Value = pos.Price * pos.Shares
+		pos.Cost = pos.BuyPrice * pos.Shares
+		pos.Gain = (pos.Price - pos.BuyPrice) * pos.Shares
+	} else { // Past holding
+		pos.Cost = pos.BuyPrice * pos.Shares
+		pos.Gain = (pos.SalePrice - pos.BuyPrice) * pos.Shares
+	}
+}
+
+func reflectSectorDist(pos input.Position, sectorName string, portfolio *input.Portfolio) {
+	var sector map[string]float64
+
+	if pos.Type == "taxed" {
+		sector = portfolio.Posttaxes.Sectors
+	} else if pos.Type == "deferred" {
+		sector = portfolio.Pretaxes.Sectors
+	} else { // research type
+		return
+	}
+
+	if pos.SaleDate == "" {
+		if len(sectorName) > 0 {
+			sector[sectorName] += pos.Value
 		} else {
-			portfolio.Positions[i].Weight = math.Floor(100*pos.Value/portfolio.Pretaxes.Value*100) / 100
+			if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
+				pos.Ticker != "etrade" && pos.Ticker != "merrill" {
+				sector[mutualFundETF] += pos.Value
+			} else {
+				sector[cash] += pos.Value
+			}
 		}
 	}
-	sortPositionsByWeight(portfolio.Positions)
+}
+
+func updateSubPortfolio(portfolio *input.Portfolio, pos input.Position) {
+	var sub *input.Summary
+
+	if pos.Type == "taxed" {
+		sub = &portfolio.Posttaxes
+	} else if pos.Type == "deferred" {
+		sub = &portfolio.Pretaxes
+	} else { // research type
+		return
+	}
+
+	sub.Cost += pos.Cost
+	sub.Gain += pos.Gain
+	sub.Value += pos.Value
+	// Mutual funds are updated after the market closes
+	sub.TodayGain += pos.RegularMarketChangePercent * pos.Value / 100
+	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
+		sub.Cash += pos.Value
+	}
+}
+
+func weighEquity(portfolio *input.Portfolio, pos *input.Position) {
+	if pos.Type == "deferred" || pos.Type == "taxed" {
+		pos.Percentage = pos.Gain / pos.Cost * 100
+		// Average buy price
+		pos.BuyPrice = pos.Cost / pos.Shares
+		if pos.Type == "taxed" {
+			pos.Weight = pos.Value / portfolio.Posttaxes.Value * 100
+		} else {
+			pos.Weight = pos.Value / portfolio.Pretaxes.Value * 100
+		}
+	}
 }
 
 func getFinancial(positions []input.Position) {
 	equities := make(map[string]*finance.Equity)
 	var e *finance.Equity = nil
 
+	start := time.Now()
 	for index, pos := range positions {
 		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
 			positions[index].Name = pos.Ticker
@@ -134,14 +160,20 @@ func getFinancial(positions []input.Position) {
 				positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
 				positions[index].FiftyDayAverage = e.FiftyDayAverage
 				positions[index].TwoHundredDayAverage = e.TwoHundredDayAverage
+				positions[index].RegularMarketChangePercent = e.RegularMarketChangePercent
+				positions[index].QuoteType = e.QuoteType
+				positions[index].MarketState = e.MarketState
+				positions[index].EarningsTimestamp = time.Unix(int64(e.EarningsTimestamp), 0).Format("2006/01/02")
 			}
 		}
 	}
+	log.Println("getFinancial() takes", time.Since(start))
 }
 
 func getProfiles(positions []input.Position) map[string]financialmodelingprep.Company {
 	profiles := make(map[string]financialmodelingprep.Company)
 
+	start := time.Now()
 	for _, pos := range positions {
 		if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
 			pos.Ticker != "etrade" && pos.Ticker != "merrill" && pos.Ticker != "payflex" &&
@@ -153,6 +185,7 @@ func getProfiles(positions []input.Position) map[string]financialmodelingprep.Co
 			}
 		}
 	}
+	log.Println("getProfiles() takes", time.Since(start))
 	return profiles
 }
 
@@ -181,7 +214,7 @@ func consolidate(pos positions) positions {
 	for _, p := range pos {
 		found := false
 		for i, c := range consolidated {
-			if p.Ticker == c.Ticker && p.Taxed == c.Taxed &&
+			if p.Ticker == c.Ticker && p.Type == c.Type &&
 				((p.SaleDate == "" && c.SaleDate == "") || (p.SaleDate != "" && c.SaleDate != "")) {
 				consolidated[i].Shares += p.Shares
 				consolidated[i].Gain += p.Gain

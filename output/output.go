@@ -3,7 +3,6 @@ package output
 import (
 	"html/template"
 	"log"
-	"math"
 	"net/http"
 	"time"
 
@@ -15,6 +14,7 @@ type page struct {
 	t         *template.Template
 	Pretaxes  portfolio
 	Posttaxes portfolio
+	Research  portfolio
 }
 
 type portfolio struct {
@@ -24,6 +24,7 @@ type portfolio struct {
 	Gain       float64 // overall gain
 	Percentage float64 // gain percentage
 	Cash       float64 // cash available
+	TodayGain  float64
 }
 
 type sector struct {
@@ -47,21 +48,25 @@ func Init() {
 
 // Render formats the data & writes it to a html file
 func Render(p input.Portfolio) {
-	data.Date = time.Now().Format("Mon Jan _2 15:04:05 2006")
-	data.Pretaxes = portfolio{Value: math.Floor(p.Pretaxes.Value*100) / 100,
-		Gain:       math.Floor(p.Pretaxes.Gain*100) / 100,
-		Percentage: math.Floor((100*(p.Pretaxes.Gain)/p.Pretaxes.Cost)*100) / 100,
-		Cash:       math.Floor(100*p.Pretaxes.Cash) / 100}
-	data.Posttaxes = portfolio{Value: math.Floor(p.Posttaxes.Value*100) / 100,
-		Gain:       math.Floor((p.Posttaxes.Gain)*100) / 100,
-		Percentage: math.Floor((100*(p.Posttaxes.Gain)/p.Posttaxes.Cost)*100) / 100,
-		Cash:       math.Floor(100*p.Posttaxes.Cash) / 100}
+	data.Date = time.Now().Format("Mon Jan 2 15:04:05 2006")
+	data.Pretaxes = portfolio{Value: p.Pretaxes.Value,
+		Gain:       p.Pretaxes.Gain,
+		Percentage: p.Pretaxes.Gain / p.Pretaxes.Cost,
+		Cash:       p.Pretaxes.Cash,
+		TodayGain:  p.Pretaxes.TodayGain}
+	data.Posttaxes = portfolio{Value: p.Posttaxes.Value,
+		Gain:       p.Posttaxes.Gain,
+		Percentage: p.Posttaxes.Gain / p.Posttaxes.Cost,
+		Cash:       p.Posttaxes.Cash,
+		TodayGain:  p.Posttaxes.TodayGain}
 
 	for _, pos := range p.Positions {
-		if pos.Taxed {
+		if pos.Type == "taxed" {
 			data.Posttaxes.Positions = append(data.Posttaxes.Positions, pos)
-		} else {
+		} else if pos.Type == "deferred" {
 			data.Pretaxes.Positions = append(data.Pretaxes.Positions, pos)
+		} else if pos.Type == "research" {
+			data.Research.Positions = append(data.Research.Positions, pos)
 		}
 	}
 	for key, value := range p.Posttaxes.Sectors {
