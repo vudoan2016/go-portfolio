@@ -12,13 +12,13 @@ import (
 type page struct {
 	Date      string
 	t         *template.Template
+	Positions []input.Position
 	Pretaxes  portfolio
 	Posttaxes portfolio
 	Research  portfolio
 }
 
 type portfolio struct {
-	Positions  []input.Position
 	Sectors    []sector
 	Value      float64 // market value of portfolio
 	Gain       float64 // overall gain
@@ -51,24 +51,16 @@ func Render(p input.Portfolio) {
 	data.Date = time.Now().Format("Mon Jan 2 15:04:05 2006")
 	data.Pretaxes = portfolio{Value: p.Pretaxes.Value,
 		Gain:       p.Pretaxes.Gain,
-		Percentage: p.Pretaxes.Gain / p.Pretaxes.Cost,
+		Percentage: p.Pretaxes.Gain / p.Pretaxes.Cost * 100,
 		Cash:       p.Pretaxes.Cash,
 		TodayGain:  p.Pretaxes.TodayGain}
 	data.Posttaxes = portfolio{Value: p.Posttaxes.Value,
 		Gain:       p.Posttaxes.Gain,
-		Percentage: p.Posttaxes.Gain / p.Posttaxes.Cost,
+		Percentage: p.Posttaxes.Gain / p.Posttaxes.Cost * 100,
 		Cash:       p.Posttaxes.Cash,
 		TodayGain:  p.Posttaxes.TodayGain}
-
-	for _, pos := range p.Positions {
-		if pos.Type == "taxed" {
-			data.Posttaxes.Positions = append(data.Posttaxes.Positions, pos)
-		} else if pos.Type == "deferred" {
-			data.Pretaxes.Positions = append(data.Pretaxes.Positions, pos)
-		} else if pos.Type == "research" {
-			data.Research.Positions = append(data.Research.Positions, pos)
-		}
-	}
+	log.Println("Post/pre tax +/-", p.Posttaxes.TodayGain, p.Pretaxes.TodayGain)
+	data.Positions = p.Positions
 	for key, value := range p.Posttaxes.Sectors {
 		data.Posttaxes.Sectors = append(data.Posttaxes.Sectors, sector{Name: key, Weight: value})
 	}

@@ -85,7 +85,7 @@
       "symbol": "sdscx",
       "shares": 1334.573,
       "buydate": "06-11-2020",
-      "purchaseprice": 23.59,
+      "purchaseprice": 18.753,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -94,7 +94,7 @@
       "symbol": "sdscx",
       "shares": 331.31,
       "buydate": "06-11-2018",
-      "purchaseprice": 23.59,
+      "purchaseprice": 18.753,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -103,7 +103,7 @@
       "symbol": "vinix",
       "shares": 144.039,
       "buydate": "02-20-2020",
-      "purchaseprice": 303.81,
+      "purchaseprice": 272.824,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -112,7 +112,7 @@
       "symbol": "vinix",
       "shares": 38.984,
       "buydate": "02-20-2020",
-      "purchaseprice": 303.81,
+      "purchaseprice": 272.824,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -352,9 +352,18 @@
       "type": "deferred"
     },
     {
+      "symbol": "bac",
+      "shares": 480,
+      "buydate": "05-13-2020",
+      "purchaseprice": 20.8977,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "etrade",
-      "shares": 40349.1,
-      "buydate": "04-30-2020",
+      "shares": 30318.204,
+      "buydate": "05-13-2020",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -371,7 +380,7 @@
     },
     {
       "symbol": "payflex",
-      "shares": 1090.38,
+      "shares": 1635.39,
       "buydate": "04-10-2020",
       "purchaseprice": 1,
       "saledate": "",

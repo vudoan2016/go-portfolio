@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"github.com/piquette/finance-go"
 )
@@ -49,6 +50,8 @@ type Position struct {
 	EarningsTimestamp           string
 	MarketState                 finance.MarketState
 	QuoteType                   finance.QuoteType
+	RegularMarketPreviousClose  float64
+	RegularMarketTime           time.Time
 }
 
 // Get portfolio from a json file

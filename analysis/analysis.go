@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	mutualFundETF = "Mutual fund/ETF"
-	cash          = "Cash"
+	mutualFundETF       = "Mutual fund/ETF"
+	cash                = "Cash"
+	openingBellHour int = 8
 )
 
 // Analyze calculates the portfolio's performance
@@ -110,11 +111,24 @@ func updateSubPortfolio(portfolio *input.Portfolio, pos input.Position) {
 	sub.Cost += pos.Cost
 	sub.Gain += pos.Gain
 	sub.Value += pos.Value
-	// Mutual funds are updated after the market closes
-	sub.TodayGain += pos.RegularMarketChangePercent * pos.Value / 100
+	sub.TodayGain += calcTodayGain(pos)
 	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
 		sub.Cash += pos.Value
 	}
+}
+
+func calcTodayGain(pos input.Position) float64 {
+	var gain float64
+
+	if pos.SaleDate == "" && pos.Type != "research" &&
+		(pos.QuoteType == finance.QuoteTypeEquity || pos.QuoteType == finance.QuoteTypeETF ||
+			// Mutual funds are not updated until around 15:00 PDT on trading days.
+			// Todo: weekend & holidays?
+			(pos.QuoteType == finance.QuoteTypeMutualFund &&
+				pos.MarketState != finance.MarketStateRegular && pos.RegularMarketTime.Hour() > openingBellHour)) {
+		gain = pos.RegularMarketChangePercent * pos.RegularMarketPreviousClose * pos.Shares / 100
+	}
+	return gain
 }
 
 func weighEquity(portfolio *input.Portfolio, pos *input.Position) {
@@ -163,7 +177,9 @@ func getFinancial(positions []input.Position) {
 				positions[index].RegularMarketChangePercent = e.RegularMarketChangePercent
 				positions[index].QuoteType = e.QuoteType
 				positions[index].MarketState = e.MarketState
+				positions[index].RegularMarketPreviousClose = e.RegularMarketPreviousClose
 				positions[index].EarningsTimestamp = time.Unix(int64(e.EarningsTimestamp), 0).Format("2006/01/02")
+				positions[index].RegularMarketTime = time.Unix(int64(e.RegularMarketTime), 0)
 			}
 		}
 	}
