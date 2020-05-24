@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/vudoan2016/portfolio/input"
 )
 
@@ -19,17 +20,16 @@ type page struct {
 }
 
 type portfolio struct {
-	Sectors    []sector
-	Value      float64 // market value of portfolio
-	Gain       float64 // overall gain
-	Percentage float64 // gain percentage
-	Cash       float64 // cash available
-	TodayGain  float64
+	Sectors   []sector
+	Value     float64 // market value of portfolio
+	Gain      float64 // overall gain
+	Cash      float64 // cash available
+	TodayGain float64
 }
 
 type sector struct {
-	Name   string
-	Weight float64
+	Name  string
+	Value float64
 }
 
 var data page
@@ -50,31 +50,38 @@ func Init() {
 func Render(p input.Portfolio) {
 	data.Date = time.Now().Format("Mon Jan 2 15:04:05 2006")
 	data.Pretaxes = portfolio{Value: p.Pretaxes.Value,
-		Gain:       p.Pretaxes.Gain,
-		Percentage: p.Pretaxes.Gain / p.Pretaxes.Cost * 100,
-		Cash:       p.Pretaxes.Cash,
-		TodayGain:  p.Pretaxes.TodayGain}
+		Gain:      p.Pretaxes.Gain,
+		Cash:      p.Pretaxes.Cash,
+		TodayGain: p.Pretaxes.TodayGain}
 	data.Posttaxes = portfolio{Value: p.Posttaxes.Value,
-		Gain:       p.Posttaxes.Gain,
-		Percentage: p.Posttaxes.Gain / p.Posttaxes.Cost * 100,
-		Cash:       p.Posttaxes.Cash,
-		TodayGain:  p.Posttaxes.TodayGain}
-	log.Println("Post/pre tax +/-", p.Posttaxes.TodayGain, p.Pretaxes.TodayGain)
+		Gain:      p.Posttaxes.Gain,
+		Cash:      p.Posttaxes.Cash,
+		TodayGain: p.Posttaxes.TodayGain}
 	data.Positions = p.Positions
+
 	for key, value := range p.Posttaxes.Sectors {
-		data.Posttaxes.Sectors = append(data.Posttaxes.Sectors, sector{Name: key, Weight: value})
+		data.Posttaxes.Sectors = append(data.Posttaxes.Sectors, sector{Name: key, Value: value})
 	}
 
 	for key, value := range p.Pretaxes.Sectors {
-		data.Pretaxes.Sectors = append(data.Pretaxes.Sectors, sector{Name: key, Weight: value})
+		data.Pretaxes.Sectors = append(data.Pretaxes.Sectors, sector{Name: key, Value: value})
 	}
 }
 
-func Respond(w http.ResponseWriter, r *http.Request) {
-	if data.t != nil {
-		err := data.t.Execute(w, data)
-		if err != nil {
-			log.Println("Executed template with error", err)
-		}
-	}
+func Respond(ctx *gin.Context) {
+	// Call the HTML method of the Context to render a template
+	ctx.HTML(
+		// Set the HTTP status to 200 (OK)
+		http.StatusOK,
+		// Use the index.html template
+		"layout.html",
+		// Pass the data that the page uses
+		gin.H{
+			"Date":      data.Date,
+			"Positions": data.Positions,
+			"Pretaxes":  data.Pretaxes,
+			"Posttaxes": data.Posttaxes,
+			"Research":  data.Research,
+		},
+	)
 }

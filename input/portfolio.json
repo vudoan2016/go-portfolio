@@ -83,36 +83,18 @@
     },
     {
       "symbol": "sdscx",
-      "shares": 1334.573,
-      "buydate": "06-11-2020",
-      "purchaseprice": 18.753,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "deferred"
-    },
-    {
-      "symbol": "sdscx",
-      "shares": 331.31,
-      "buydate": "06-11-2018",
-      "purchaseprice": 18.753,
+      "shares": 1665.883,
+      "buydate": "05-18-2020",
+      "purchaseprice": 20.72,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
     },
     {
       "symbol": "vinix",
-      "shares": 144.039,
-      "buydate": "02-20-2020",
-      "purchaseprice": 272.824,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "deferred"
-    },
-    {
-      "symbol": "vinix",
-      "shares": 38.984,
-      "buydate": "02-20-2020",
-      "purchaseprice": 272.824,
+      "shares": 183.023,
+      "buydate": "05-18-2020",
+      "purchaseprice": 276.861,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -676,6 +658,24 @@
       "type": "taxed"
     },
     {
+      "symbol": "lmt",
+      "shares": 14,
+      "buydate": "05-20-2020",
+      "purchaseprice": 362.67,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
+      "symbol": "msi",
+      "shares": 72,
+      "buydate": "05-21-2020",
+      "purchaseprice": 136.99,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "vanguard",
       "shares": 128.3,
       "buydate": "04-28-2020",
@@ -686,8 +686,8 @@
     },
     {
       "symbol": "merrill",
-      "shares": 10865.375,
-      "buydate": "05-12-2020",
+      "shares": 5787.939,
+      "buydate": "05-20-2020",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -695,8 +695,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 78851.4882,
-      "buydate": "05-12-2020",
+      "shares": 68988.2082,
+      "buydate": "05-21-2020",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -865,15 +865,6 @@
       "type": "research"
     },
     {
-      "symbol": "msi",
-      "shares": 0,
-      "buydate": "05-11-2020",
-      "purchaseprice": 130.14,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "research"
-    },
-    {
       "symbol": "dis",
       "shares": 0,
       "buydate": "05-11-2020",
@@ -883,10 +874,10 @@
       "type": "research"
     },
     {
-      "symbol": "met",
+      "symbol": "tm",
       "shares": 0,
-      "buydate": "05-11-2020",
-      "purchaseprice": 33.97,
+      "buydate": "05-20-2020",
+      "purchaseprice": 119.82,
       "saledate": "",
       "saleprice": 0,
       "type": "research"
@@ -914,6 +905,15 @@
       "shares": 0,
       "buydate": "05-10-2020",
       "purchaseprice": 99.03,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "fb",
+      "shares": 0,
+      "buydate": "05-20-2020",
+      "purchaseprice": 229.97,
       "saledate": "",
       "saleprice": 0,
       "type": "research"

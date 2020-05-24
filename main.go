@@ -3,13 +3,14 @@ package main
 import (
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/vudoan2016/portfolio/analysis"
 	"github.com/vudoan2016/portfolio/input"
+	"github.com/vudoan2016/portfolio/models"
 	"github.com/vudoan2016/portfolio/output"
 )
 
@@ -31,13 +32,19 @@ func main() {
 		file = os.Args[1]
 	}
 
+	db := models.ConnectDataBase()
+	defer db.Close()
+
+	router := gin.Default()
+	router.LoadHTMLGlob("output/layout.html")
+
 	symbols := input.Get(file)
-	analysis.Analyze(&symbols)
+	analysis.Analyze(&symbols, db)
 	output.Init()
 	output.Render(symbols)
 
-	http.HandleFunc("/", output.Respond)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router.GET("/", output.Respond)
+	router.Run()
 }
 
 // Find file in current directory and level-1 subdirectories

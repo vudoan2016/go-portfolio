@@ -59,10 +59,10 @@
         array.push(header);
 
         for (var i = 0; i < positions.length; i++) {
-          var row = [];
-          if (type == positions[i].Type) {
+          if (type === positions[i].type || type === "") {
+            var row = [];
             row.push(positions[i].Name);
-            row.push(positions[i].Weight);
+            row.push(positions[i].Value);
             array.push(row);
           }
         }
@@ -85,10 +85,10 @@
       }
 
       function drawChart() {
-        drawOneChart("Components", "preTaxHoldings", createChartData({{ .Positions }}));
-        drawOneChart("Components", "postTaxHoldings", createChartData({{ .Positions }}));
-        drawOneChart("Sectors", "preTaxSectors", createChartData({{ .Pretaxes.Sectors }}));
-        drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}));
+        drawOneChart("Components", "preTaxHoldings", createChartData({{ .Positions }}, "deferred"));
+        drawOneChart("Components", "postTaxHoldings", createChartData({{ .Positions }}, "taxed"));
+        drawOneChart("Sectors", "preTaxSectors", createChartData({{ .Pretaxes.Sectors }}, ""));
+        drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}, ""));
       }
 
       function createTableData(positions, active, type) {
@@ -111,14 +111,14 @@
 
             row.push(positions[i].Name)
             row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
-            row.push(positions[i].Price);
+            row.push(positions[i].RegularMarketPrice);
             row.push(positions[i].FiftyDayAverage);
             row.push(positions[i].TwoHundredDayAverage);
             row.push(positions[i].RegularMarketChangePercent);
             row.push(positions[i].Value);
             row.push(positions[i].Weight);
             row.push(positions[i].Gain);
-            row.push(positions[i].Percentage);
+            row.push(positions[i].Gain/positions[i].Cost*100);
             row.push(positions[i].shares); // can't use Shares
             row.push(positions[i].purchaseprice);
             row.push(positions[i].buydate);
@@ -146,10 +146,10 @@
         return view
       }
 
-      function createSummaryTableData(todayGain, value, gain, percentage, cash) {
+      function createSummaryTableData(todayGain, gain, value, cash) {
         var array = [];
         array.push(["Today($)", "Today(%)", "Value", "Gain", "Percentage", "Cash"]);
-        array.push([todayGain, todayGain/value*100, value, gain, percentage, cash]);
+        array.push([todayGain, todayGain/(value-todayGain)*100, value, gain, gain/value*100, cash]);
 
         var data = google.visualization.arrayToDataTable(array);
 
@@ -166,7 +166,7 @@
             var row = [];
             row.push(positions[i].Name)
             row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
-            row.push(positions[i].Price);
+            row.push(positions[i].RegularMarketPrice);
             row.push(positions[i].FiftyDayAverage);
             row.push(positions[i].TwoHundredDayAverage);
             row.push(positions[i].RegularMarketChangePercent);
@@ -203,22 +203,20 @@
       function drawTable() {
         var value = {{.Pretaxes.Value}}
         var gain = {{.Pretaxes.Gain}}
-        var percentage = {{.Pretaxes.Percentage}}
         var cash =  {{.Pretaxes.Cash}}
         var todayGain = {{.Pretaxes.TodayGain}}
         var view = createTableData({{ .Positions }}, true, "deferred")
-        var summaryView = createSummaryTableData(todayGain, value, gain, percentage, cash)
+        var summaryView = createSummaryTableData(todayGain, gain, value, cash)
         drawATable("Components", "retirement", view, true);
         drawATable("Summary", "preTaxSummaryTable", summaryView, false);
 
         value = {{.Posttaxes.Value}}
         gain = {{.Posttaxes.Gain}}
-        percentage = {{.Posttaxes.Percentage}}
         cash =  {{.Posttaxes.Cash}}
         todayGain = {{.Posttaxes.TodayGain}}
         view = createTableData({{ .Positions }}, true, "taxed")
         pastView = createTableData({{ .Positions }}, false, "")
-        summaryView = createSummaryTableData(todayGain, value, gain, percentage, cash)
+        summaryView = createSummaryTableData(todayGain, gain, value, cash)
         drawATable("Components", "investment", view, true);
         drawATable("Components", "pastInvestment", pastView, true);
         drawATable("Summary", "postTaxSummaryTable", summaryView, false);

@@ -5,10 +5,12 @@ import (
 	"sort"
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/piquette/finance-go"
 	"github.com/piquette/finance-go/equity"
-	"github.com/vudoan2016/portfolio/financialmodelingprep"
+	"github.com/vudoan2016/portfolio/finhub"
 	"github.com/vudoan2016/portfolio/input"
+	"github.com/vudoan2016/portfolio/models"
 )
 
 const (
@@ -18,13 +20,13 @@ const (
 )
 
 // Analyze calculates the portfolio's performance
-func Analyze(portfolio *input.Portfolio) {
+func Analyze(portfolio *input.Portfolio, db *gorm.DB) {
 	// Combine into one?
 	portfolio.Posttaxes.Sectors = make(map[string]float64)
 	portfolio.Pretaxes.Sectors = make(map[string]float64)
 
 	// Todo: cache
-	profiles := getProfiles(portfolio.Positions)
+	profiles := getProfiles(portfolio.Positions, db)
 	getFinancial(portfolio.Positions)
 
 	for i, pos := range portfolio.Positions {
@@ -63,9 +65,9 @@ func Analyze(portfolio *input.Portfolio) {
 func populatePosition(pos *input.Position) {
 	// Active holding
 	if pos.SaleDate == "" {
-		pos.Value = pos.Price * pos.Shares
+		pos.Value = pos.RegularMarketPrice * pos.Shares
 		pos.Cost = pos.BuyPrice * pos.Shares
-		pos.Gain = (pos.Price - pos.BuyPrice) * pos.Shares
+		pos.Gain = (pos.RegularMarketPrice - pos.BuyPrice) * pos.Shares
 	} else { // Past holding
 		pos.Cost = pos.BuyPrice * pos.Shares
 		pos.Gain = (pos.SalePrice - pos.BuyPrice) * pos.Shares
@@ -133,7 +135,6 @@ func calcTodayGain(pos input.Position) float64 {
 
 func weighEquity(portfolio *input.Portfolio, pos *input.Position) {
 	if pos.Type == "deferred" || pos.Type == "taxed" {
-		pos.Percentage = pos.Gain / pos.Cost * 100
 		// Average buy price
 		pos.BuyPrice = pos.Cost / pos.Shares
 		if pos.Type == "taxed" {
@@ -152,7 +153,7 @@ func getFinancial(positions []input.Position) {
 	for index, pos := range positions {
 		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
 			positions[index].Name = pos.Ticker
-			positions[index].Price = pos.BuyPrice
+			positions[index].RegularMarketPrice = pos.BuyPrice
 		} else {
 			var exist bool
 			var err error
@@ -168,7 +169,7 @@ func getFinancial(positions []input.Position) {
 			}
 			if exist || err == nil {
 				positions[index].Name = e.ShortName
-				positions[index].Price = e.RegularMarketPrice
+				positions[index].RegularMarketPrice = e.RegularMarketPrice
 				positions[index].ForwardPE = e.ForwardPE
 				positions[index].ForwardEPS = e.EpsForward
 				positions[index].TrailingAnnualDividendYield = e.TrailingAnnualDividendYield
@@ -186,18 +187,18 @@ func getFinancial(positions []input.Position) {
 	log.Println("getFinancial() takes", time.Since(start))
 }
 
-func getProfiles(positions []input.Position) map[string]financialmodelingprep.Company {
-	profiles := make(map[string]financialmodelingprep.Company)
+func getProfiles(positions []input.Position, db *gorm.DB) map[string]models.Company {
+	profiles := make(map[string]models.Company)
 
 	start := time.Now()
 	for _, pos := range positions {
 		if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
 			pos.Ticker != "etrade" && pos.Ticker != "merrill" && pos.Ticker != "payflex" &&
-			pos.Ticker != "vinix" && pos.Ticker != "sdscx" &&
+			pos.Ticker != "vinix" && pos.Ticker != "sdscx" && pos.Ticker != "vig" &&
 			pos.Ticker != "seegx" && pos.Ticker != "sflnx" &&
 			pos.SaleDate == "" {
 			if _, exist := profiles[pos.Ticker]; !exist {
-				profiles[pos.Ticker] = financialmodelingprep.GetProfile(pos.Ticker)
+				profiles[pos.Ticker] = finhub.GetProfile(pos.Ticker, db)
 			}
 		}
 	}

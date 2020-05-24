@@ -5,25 +5,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/vudoan2016/portfolio/models"
 )
 
 const (
 	profileURL = "https://financialmodelingprep.com/api/v3/company/profile/"
-	ratingURL  = "https://financialmodelingprep.com/api/v3/company/rating/AAPL"
+	ratingURL  = "https://financialmodelingprep.com/api/v3/models.Company/rating/AAPL"
 )
 
-type Company struct {
-	P profile `json:"profile"`
-}
-
-type profile struct {
-	Industry string `json:"industry"`
-	Sector   string `json:"sector"`
-}
-
-// GetProfile returns key data of a company
-func GetProfile(symbol string) Company {
-	var c Company
+// GetProfile returns key data of a models.Company
+func GetProfile(symbol string) models.Company {
+	var c models.Company
 
 	response, err := http.Get(profileURL + symbol)
 	if err != nil {
