@@ -37,16 +37,21 @@ type Position struct {
 	Type      string  `json:"type"`
 
 	// Populate using piquette library
-	RegularMarketPrice          float64
-	ForwardPE                   float64
-	ForwardEPS                  float64
-	TrailingAnnualDividendYield float64
-	FiftyDayAverage             float64
-	TwoHundredDayAverage        float64
-	RegularMarketChangePercent  float64
-	MarketState                 finance.MarketState
-	QuoteType                   finance.QuoteType
-	RegularMarketPreviousClose  float64
+	RegularMarketPrice            float64
+	ForwardPE                     float64
+	ForwardEPS                    float64
+	TrailingAnnualDividendYield   float64
+	FiftyDayAverage               float64
+	TwoHundredDayAverage          float64
+	RegularMarketChangePercent    float64
+	MarketState                   finance.MarketState
+	QuoteType                     finance.QuoteType
+	RegularMarketPreviousClose    float64
+	FiftyTwoWeekLowChangePercent  float64
+	FiftyTwoWeekHighChangePercent float64
+	RegularMarketVolume           int
+	AverageDailyVolume10Day       int
+	AverageDailyVolume3Month      int
 
 	// Analysis fields
 	Name              string
@@ -66,12 +71,11 @@ func Get(fileName string) Portfolio {
 	}
 	byteStream, _ := ioutil.ReadAll(jsonFile)
 
-	var p Portfolio
-	err = json.Unmarshal(byteStream, &p)
+	var portfolio Portfolio
+	err = json.Unmarshal(byteStream, &portfolio)
 	if err != nil {
 		log.Println(err)
 	}
-
 	jsonFile.Close()
-	return p
+	return portfolio
 }

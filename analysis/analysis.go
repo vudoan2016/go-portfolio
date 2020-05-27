@@ -181,6 +181,11 @@ func getFinancial(positions []input.Position) {
 				positions[index].RegularMarketPreviousClose = e.RegularMarketPreviousClose
 				positions[index].EarningsTimestamp = time.Unix(int64(e.EarningsTimestamp), 0).Format("2006/01/02")
 				positions[index].RegularMarketTime = time.Unix(int64(e.RegularMarketTime), 0)
+				positions[index].FiftyTwoWeekLowChangePercent = e.FiftyTwoWeekLowChangePercent
+				positions[index].FiftyTwoWeekHighChangePercent = e.FiftyTwoWeekHighChangePercent
+				positions[index].RegularMarketVolume = e.RegularMarketVolume
+				positions[index].AverageDailyVolume10Day = e.AverageDailyVolume10Day
+				positions[index].AverageDailyVolume3Month = e.AverageDailyVolume3Month
 			}
 		}
 	}

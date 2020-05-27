@@ -53,16 +53,28 @@
       google.charts.setOnLoadCallback(drawChart);
       google.charts.setOnLoadCallback(drawTable);
 
-      function createChartData(positions, type) {
+      function createChartData(positions, type, key) {
         var array = [];
-        var header = ["Name", "Weight"];
+        var header = ["Name"];
+        
+        if (key === "gain")
+          header.push("%");
+        else 
+          header.push("Weight")
         array.push(header);
 
         for (var i = 0; i < positions.length; i++) {
-          if (type === positions[i].type || type === "") {
+          if (positions[i].Value > 0 && (type === positions[i].type || type === "")) {
             var row = [];
             row.push(positions[i].Name);
-            row.push(positions[i].Value);
+            if (key === "weight") {
+              row.push(positions[i].Value);
+            } else {
+              if (positions[i].Cost != 0)
+                row.push(positions[i].Gain/positions[i].Cost*100);
+              else
+                row.push(0)
+            }
             array.push(row);
           }
         }
@@ -72,29 +84,36 @@
 
       function drawOneChart(title, id, data) {
         var options = {
-          title: title,
-          width:900,
-          height:500
-        };
-
-        var chart = new google.visualization.PieChart(
-          document.getElementById(id)
-        );
-
+            title: title,
+            width:1000,
+          };
+        if (id === "preTaxGains" || id === "postTaxGains") {
+          options.height = 800;
+          var chart = new google.visualization.BarChart(
+            document.getElementById(id)
+          );
+        } else {
+          options.height = 600;
+          var chart = new google.visualization.PieChart(
+            document.getElementById(id)
+          );
+        }
         chart.draw(data, options);
       }
 
       function drawChart() {
-        drawOneChart("Components", "preTaxHoldings", createChartData({{ .Positions }}, "deferred"));
-        drawOneChart("Components", "postTaxHoldings", createChartData({{ .Positions }}, "taxed"));
-        drawOneChart("Sectors", "preTaxSectors", createChartData({{ .Pretaxes.Sectors }}, ""));
-        drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}, ""));
+        drawOneChart("Weight", "preTaxWeights", createChartData({{ .Positions }}, "deferred", "weight"));
+        drawOneChart("Gain", "preTaxGains", createChartData({{ .Positions }}, "deferred", "gain"));
+        drawOneChart("Weight", "postTaxWeights", createChartData({{ .Positions }}, "taxed", "weight"));
+        drawOneChart("Gain", "postTaxGains", createChartData({{ .Positions }}, "taxed", "gain"));
+        drawOneChart("Sectors", "preTaxSectors", createChartData({{ .Pretaxes.Sectors }}, "", "weight"));
+        drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}, "", "weight"));
       }
 
       function createTableData(positions, active, type) {
         var array = [];
-        var header = ["Name", "", "Price", "50-MA", "200-MA", "Price(%)", "Value($)", "Weight(%)", 
-                      "Gain($)", "Gain(%)", "Shares", "Purchase Price", "Purchase Date"];
+        var header = ["Name", "", "Price", "Price(%)", "Vol", "10D-AvgVol(%)", "3M-AvgVol(%)", "50D-MA", "200D-MA", "52w-Low(%)", "52w-High(%)", "Value($)", 
+                      "Purchase Price", "Purchase Date"];
         if (!active) {
           header.push("Sale Price");
           header.push("Sale Date");
@@ -112,14 +131,21 @@
             row.push(positions[i].Name)
             row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
             row.push(positions[i].RegularMarketPrice);
+            row.push(positions[i].RegularMarketChangePercent);
+            row.push(positions[i].RegularMarketVolume);
+            if (positions[i].AverageDailyVolume10Day > 0)
+              row.push((positions[i].RegularMarketVolume-positions[i].AverageDailyVolume10Day)/positions[i].AverageDailyVolume10Day*100);
+            else  
+              row.push(0)
+            if (positions[i].AverageDailyVolume3Month > 0)
+              row.push((positions[i].RegularMarketVolume-positions[i].AverageDailyVolume3Month)/positions[i].AverageDailyVolume3Month*100);
+            else
+              row.push(0)
             row.push(positions[i].FiftyDayAverage);
             row.push(positions[i].TwoHundredDayAverage);
-            row.push(positions[i].RegularMarketChangePercent);
+            row.push(positions[i].FiftyTwoWeekLowChangePercent*100);
+            row.push(positions[i].FiftyTwoWeekHighChangePercent*100);
             row.push(positions[i].Value);
-            row.push(positions[i].Weight);
-            row.push(positions[i].Gain);
-            row.push(positions[i].Gain/positions[i].Cost*100);
-            row.push(positions[i].shares); // can't use Shares
             row.push(positions[i].purchaseprice);
             row.push(positions[i].buydate);
             if (!active) {
@@ -139,17 +165,17 @@
         formatter.format(data, [0, 1]);
         var view = new google.visualization.DataView(data);
         if (!active) {
-          view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]); // TODO: Better way to skip 2nd column?
+          view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]); // TODO: Better way to skip 2nd column?
         } else {
-          view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+          view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
         }
         return view
       }
 
       function createSummaryTableData(todayGain, gain, value, cash) {
         var array = [];
-        array.push(["Today($)", "Today(%)", "Value", "Gain", "Percentage", "Cash"]);
-        array.push([todayGain, todayGain/(value-todayGain)*100, value, gain, gain/value*100, cash]);
+        array.push(["Today($)", "Today(%)", "Since Inception($)", "Since Inception(%)", "Value", "Liquidity"]);
+        array.push([todayGain, todayGain/(value-todayGain)*100, gain, gain/value*100, value, cash]);
 
         var data = google.visualization.arrayToDataTable(array);
 
@@ -159,7 +185,7 @@
 
       function createresearchTableData(positions, type) {
         var array = [];
-        var header = ["Name", "", "Price($)", "50-MA", "200-MA", "Price(%)", "Forward PE", "Forward EPS", "TTM Yield(%)", "Starting Price", "Starting Date", "Earning Date"];
+        var header = ["Name", "", "Price($)",  "Price(%)", "Vol", "50D-MA", "200D-MA", "52w-Low(%)", "52w-High(%)", "Forward PE", "Forward EPS", "TTM Yield(%)", "Starting Price", "Starting Date", "Earning Date"];
         array.push(header)
         for (var i = 0; i < positions.length; i++) {
           if (type == positions[i].type) {
@@ -167,9 +193,12 @@
             row.push(positions[i].Name)
             row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
             row.push(positions[i].RegularMarketPrice);
+            row.push(positions[i].RegularMarketChangePercent);
+            row.push(positions[i].RegularMarketVolume);
             row.push(positions[i].FiftyDayAverage);
             row.push(positions[i].TwoHundredDayAverage);
-            row.push(positions[i].RegularMarketChangePercent);
+            row.push(positions[i].FiftyTwoWeekLowChangePercent*100);
+            row.push(positions[i].FiftyTwoWeekHighChangePercent*100);
             row.push(positions[i].ForwardPE);
             row.push(positions[i].ForwardEPS);
             row.push(positions[i].TrailingAnnualDividendYield*100);
@@ -185,7 +214,7 @@
         // Apply formatter and set the formatted value of the first column.
         formatter.format(data, [0, 1]);
         var view = new google.visualization.DataView(data);
-        view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+        view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
 
         return view
       }
@@ -207,7 +236,7 @@
         var todayGain = {{.Pretaxes.TodayGain}}
         var view = createTableData({{ .Positions }}, true, "deferred")
         var summaryView = createSummaryTableData(todayGain, gain, value, cash)
-        drawATable("Components", "retirement", view, true);
+        drawATable("Components", "retirementTbl", view, true);
         drawATable("Summary", "preTaxSummaryTable", summaryView, false);
 
         value = {{.Posttaxes.Value}}
@@ -217,15 +246,15 @@
         view = createTableData({{ .Positions }}, true, "taxed")
         pastView = createTableData({{ .Positions }}, false, "")
         summaryView = createSummaryTableData(todayGain, gain, value, cash)
-        drawATable("Components", "investment", view, true);
+        drawATable("Components", "investmentTbl", view, true);
         drawATable("Components", "pastInvestment", pastView, true);
-        drawATable("Summary", "postTaxSummaryTable", summaryView, false);
+        drawATable("Summary", "investmentSummaryTbl", summaryView, false);
 
         view = createresearchTableData({{ .Positions }}, "research")
         drawATable("Components", "research Table", view, true);
       }
 
-      function openPortfolio(evt, portfolio) {
+      function openPortfolio(evt, id) {
         // Declare all variables
         var i, tabcontent, tablinks;
 
@@ -238,68 +267,81 @@
         // Get all elements with class="tablinks" and remove the class "active"
         tablinks = document.getElementsByClassName("tablinks");
         for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
+          tablinks[i].className = tablinks[i].className.replace("active", "");
         }
 
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(portfolio).style.display = "block";
-        evt.currentTarget.className += " active";
+        document.getElementById(id).style.display = "block";
+        evt.currentTarget.className += "active";
+
+        // Workaround to fix the "gain" chart
+        drawChart();
       }
     </script>
   </head>
   <body>
     <!-- Tab links -->
     <div class="tab">
-      <button class="tablinks" onclick="openPortfolio(event, 'taxDeferred')" id="defaultOpen">Retirement</button>
-      <button class="tablinks" onclick="openPortfolio(event, 'postTax')">Investment</button>
-      <button class="tablinks" onclick="openPortfolio(event, 'pastInvestment')">Past Investment</button>
-      <button class="tablinks" onclick="openPortfolio(event, 'research')">Research</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'taxDeferredTab')" id="defaultOpen">Retirement</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'investmentTab')">Investment</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'pastInvestmentTab')">Past Investment</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'researchTab')">Research</button>
     </div>
 
     <!-- Tab content -->
-    <div id="taxDeferred" class="tabcontent">
-      <div id="retirement"></div>
+    <div id="taxDeferredTab" class="tabcontent">
+      <div id="retirementTbl"></div>
       <br></br>
       <div id="preTaxSummaryTable"></div>
       <table class="columns">
         <tr>
           <td>
-            <div id="preTaxHoldings" style="width: 900px; height: 500px;"></div>
+            <div id="preTaxWeights" style="width: 1000px; height: 600px;"></div>
           </td>
           <td>
-            <div id="preTaxSectors" style="width: 900px; height: 500px;"></div>
+            <div id="preTaxSectors" style="width: 1000px; height: 600px;"></div>
           </td>
         </tr>
       </table>
-    </div>
-
-    <div id="pastInvestment" class="tabcontent">
-      <div id="pastInvestment"></div>
-    </div>
-
-    <div id="postTax" class="tabcontent">
-      <div id="investment"></div>
-      <br></br>
-      <div id="postTaxSummaryTable"></div>
       <table class="columns">
         <tr>
           <td>
-            <div id="postTaxHoldings" style="width: 900px; height: 500px;"></div>
-          </td>
-          <td>
-            <div id="postTaxSectors" style="width: 900px; height: 500px;"></div>
+            <div id="preTaxGains" style="width: 1000px; height: 800px;"></div>
           </td>
         </tr>
       </table>
-      </div>
-
-      <div id="research" class="tabcontent">
-        <div id="research Table"></div>
-      </div>
-    
-      <script>
-        // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
-      </script>
+    </div>
+    <div id="investmentTab" class="tabcontent">
+      <div id="investmentTbl"></div>
+      <br></br>
+      <div id="investmentSummaryTbl"></div>
+      <table class="columns">
+        <tr>
+          <td>
+            <div id="postTaxWeights" style="width: 1000px; height: 600px;"></div>
+          </td>
+          <td>
+            <div id="postTaxSectors" style="width: 1000px; height: 600px;"></div>
+          </td>
+        </tr>
+      </table>
+      <table class="columns">
+        <tr>
+          <td>
+            <div id="postTaxGains" style="width: 1000px; height: 800px;"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="pastInvestmentTab" class="tabcontent">
+      <div id="pastInvestment"></div>
+    </div>
+    <div id="researchTab" class="tabcontent">
+      <div id="research Table"></div>
+    </div>
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("defaultOpen").click();
+    </script>
   </body>
 </html>

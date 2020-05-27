@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -26,23 +27,32 @@ func main() {
 	if len(os.Args) < 2 {
 		file = find(file)
 		if len(file) == 0 {
-			log.Fatalln("portfolio not found")
+			fmt.Println(file, "not found")
+			os.Exit(1)
 		}
 	} else {
 		file = os.Args[1]
 	}
 
+	// Initialize database
 	db := models.ConnectDataBase()
 	defer db.Close()
 
+	// Initialize the router
 	router := gin.Default()
 	router.LoadHTMLGlob("output/layout.html")
 
+	// Load portfolio data
 	symbols := input.Get(file)
+
+	// Poll stock prices & perform simple analysis
 	analysis.Analyze(&symbols, db)
+
+	// Initialize the output module to render template
 	output.Init()
 	output.Render(symbols)
 
+	// Ready to serve
 	router.GET("/", output.Respond)
 	router.Run()
 }
