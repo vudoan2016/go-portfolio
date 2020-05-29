@@ -66,16 +66,17 @@
         for (var i = 0; i < positions.length; i++) {
           if (positions[i].Value > 0 && (type === positions[i].type || type === "")) {
             var row = [];
-            row.push(positions[i].Name);
             if (key === "weight") {
+              row.push(positions[i].Name);
               row.push(positions[i].Value);
+              array.push(row);
             } else {
-              if (positions[i].Cost != 0)
+              if (positions[i].Cost > 0 && positions[i].Gain != 0) {
+                row.push(positions[i].Name);
                 row.push(positions[i].Gain/positions[i].Cost*100);
-              else
-                row.push(0)
+                array.push(row);
+              }
             }
-            array.push(row);
           }
         }
         var data = google.visualization.arrayToDataTable(array);
@@ -87,7 +88,7 @@
             title: title,
             width:1000,
           };
-        if (id === "preTaxGains" || id === "postTaxGains") {
+        if (id === "retirementGains" || id === "investmentGains") {
           options.height = 800;
           var chart = new google.visualization.BarChart(
             document.getElementById(id)
@@ -102,12 +103,12 @@
       }
 
       function drawChart() {
-        drawOneChart("Weight", "preTaxWeights", createChartData({{ .Positions }}, "deferred", "weight"));
-        drawOneChart("Gain", "preTaxGains", createChartData({{ .Positions }}, "deferred", "gain"));
-        drawOneChart("Weight", "postTaxWeights", createChartData({{ .Positions }}, "taxed", "weight"));
-        drawOneChart("Gain", "postTaxGains", createChartData({{ .Positions }}, "taxed", "gain"));
-        drawOneChart("Sectors", "preTaxSectors", createChartData({{ .Pretaxes.Sectors }}, "", "weight"));
-        drawOneChart("Sectors", "postTaxSectors", createChartData({{ .Posttaxes.Sectors }}, "", "weight"));
+        drawOneChart("Weight", "retirementWeights", createChartData({{ .Positions }}, "deferred", "weight"));
+        drawOneChart("Gain", "retirementGains", createChartData({{ .Positions }}, "deferred", "gain"));
+        drawOneChart("Weight", "investmentWeights", createChartData({{ .Positions }}, "taxed", "weight"));
+        drawOneChart("Gain", "investmentGains", createChartData({{ .Positions }}, "taxed", "gain"));
+        drawOneChart("Sectors", "retirementSectors", createChartData({{ .Pretaxes.Sectors }}, "", "weight"));
+        drawOneChart("Sectors", "investmentSectors", createChartData({{ .Posttaxes.Sectors }}, "", "weight"));
       }
 
       function createTableData(positions, active, type) {
@@ -237,7 +238,7 @@
         var view = createTableData({{ .Positions }}, true, "deferred")
         var summaryView = createSummaryTableData(todayGain, gain, value, cash)
         drawATable("Components", "retirementTbl", view, true);
-        drawATable("Summary", "preTaxSummaryTable", summaryView, false);
+        drawATable("Summary", "retirementSummaryTbl", summaryView, false);
 
         value = {{.Posttaxes.Value}}
         gain = {{.Posttaxes.Gain}}
@@ -274,39 +275,42 @@
         document.getElementById(id).style.display = "block";
         evt.currentTarget.className += "active";
 
-        // Workaround to fix the "gain" chart
-        drawChart();
+        // Bar/column chart is not dran properly on non-default tab. The y-axis labels 
+        // overwrite each other. The workaround is to redraw the chart when the tab is
+        // selected.
+        if (id == "investmentTab")
+          drawOneChart("Gain", "investmentGains", createChartData({{ .Positions }}, "taxed", "gain"));
       }
     </script>
   </head>
   <body>
     <!-- Tab links -->
     <div class="tab">
-      <button class="tablinks" onclick="openPortfolio(event, 'taxDeferredTab')" id="defaultOpen">Retirement</button>
+      <button class="tablinks" onclick="openPortfolio(event, 'retirementTab')" id="defaultOpen">Retirement</button>
       <button class="tablinks" onclick="openPortfolio(event, 'investmentTab')">Investment</button>
       <button class="tablinks" onclick="openPortfolio(event, 'pastInvestmentTab')">Past Investment</button>
       <button class="tablinks" onclick="openPortfolio(event, 'researchTab')">Research</button>
     </div>
 
     <!-- Tab content -->
-    <div id="taxDeferredTab" class="tabcontent">
+    <div id="retirementTab" class="tabcontent">
       <div id="retirementTbl"></div>
       <br></br>
-      <div id="preTaxSummaryTable"></div>
+      <div id="retirementSummaryTbl"></div>
       <table class="columns">
         <tr>
           <td>
-            <div id="preTaxWeights" style="width: 1000px; height: 600px;"></div>
+            <div id="retirementWeights" style="width: 1000px; height: 600px;"></div>
           </td>
           <td>
-            <div id="preTaxSectors" style="width: 1000px; height: 600px;"></div>
+            <div id="retirementSectors" style="width: 1000px; height: 600px;"></div>
           </td>
         </tr>
       </table>
       <table class="columns">
         <tr>
           <td>
-            <div id="preTaxGains" style="width: 1000px; height: 800px;"></div>
+            <div id="retirementGains" style="width: 1000px; height: 800px;"></div>
           </td>
         </tr>
       </table>
@@ -318,17 +322,17 @@
       <table class="columns">
         <tr>
           <td>
-            <div id="postTaxWeights" style="width: 1000px; height: 600px;"></div>
+            <div id="investmentWeights" style="width: 1000px; height: 600px;"></div>
           </td>
           <td>
-            <div id="postTaxSectors" style="width: 1000px; height: 600px;"></div>
+            <div id="investmentSectors" style="width: 1000px; height: 600px;"></div>
           </td>
         </tr>
       </table>
       <table class="columns">
         <tr>
           <td>
-            <div id="postTaxGains" style="width: 1000px; height: 800px;"></div>
+            <div id="investmentGains" style="width: 1000px; height: 800px;"></div>
           </td>
         </tr>
       </table>

@@ -127,6 +127,15 @@
       "type": "deferred"
     },
     {
+      "symbol": "aapl",
+      "shares": 0.266,
+      "buydate": "2020-05-12",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "abmd",
       "shares": 140,
       "buydate": "2019-07-31",
@@ -344,8 +353,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 30318.204,
-      "buydate": "2020-05-13",
+      "shares": 30393.93,
+      "buydate": "2020-05-28",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -550,6 +559,15 @@
       "type": "taxed"
     },
     {
+      "symbol": "c",
+      "shares": 201,
+      "buydate": "2020-05-28",
+      "purchaseprice": 49.28,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "ma",
       "shares": 35,
       "buydate": "2020-02-25",
@@ -676,6 +694,15 @@
       "type": "taxed"
     },
     {
+      "symbol": "dis",
+      "shares": 48,
+      "buydate": "2020-05-28",
+      "purchaseprice": 117.83,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "vanguard",
       "shares": 128.3,
       "buydate": "2020-04-28",
@@ -686,8 +713,8 @@
     },
     {
       "symbol": "merrill",
-      "shares": 5787.939,
-      "buydate": "2020-05-20",
+      "shares": 134.58,
+      "buydate": "2020-05-28",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -695,8 +722,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 68988.2082,
-      "buydate": "2020-05-21",
+      "shares": 63370.28,
+      "buydate": "2020-05-28",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,

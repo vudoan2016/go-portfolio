@@ -43,14 +43,13 @@ func main() {
 	router.LoadHTMLGlob("output/layout.html")
 
 	// Load portfolio data
-	symbols := input.Get(file)
-
-	// Poll stock prices & perform simple analysis
-	analysis.Analyze(&symbols, db)
+	portfolio := input.Get(file)
 
 	// Initialize the output module to render template
 	output.Init()
-	output.Render(symbols)
+
+	// Poll stock prices & perform simple analysis
+	analysis.Run(&portfolio, db)
 
 	// Ready to serve
 	router.GET("/", output.Respond)

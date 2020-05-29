@@ -11,22 +11,58 @@ import (
 	"github.com/vudoan2016/portfolio/finhub"
 	"github.com/vudoan2016/portfolio/input"
 	"github.com/vudoan2016/portfolio/models"
+	"github.com/vudoan2016/portfolio/output"
 )
 
 const (
 	mutualFundETF       = "Mutual fund/ETF"
 	cash                = "Cash"
 	openingBellHour int = 8
+	pollingInterval int = 5 // 5-minute
 )
 
+func Run(portfolio *input.Portfolio, db *gorm.DB) {
+	profiles := getProfiles(portfolio.Positions, db)
+	Analyze(portfolio, profiles)
+	output.Render(*portfolio)
+
+	// schedule next poll
+	time.AfterFunc(time.Minute*time.Duration(pollingInterval), func() {
+		reset(portfolio)
+		Analyze(portfolio, profiles)
+		output.Render(*portfolio)
+	})
+}
+
+func reset(portfolio *input.Portfolio) {
+	portfolio.Pretaxes.Value = 0
+	portfolio.Pretaxes.PreviousValue = 0
+	portfolio.Pretaxes.Cost = 0
+	portfolio.Pretaxes.Gain = 0
+	portfolio.Pretaxes.Cash = 0
+	portfolio.Pretaxes.TodayGain = 0
+
+	portfolio.Posttaxes.Value = 0
+	portfolio.Posttaxes.PreviousValue = 0
+	portfolio.Posttaxes.Cost = 0
+	portfolio.Posttaxes.Gain = 0
+	portfolio.Posttaxes.Cash = 0
+	portfolio.Posttaxes.TodayGain = 0
+
+	for i := range portfolio.Positions {
+		portfolio.Positions[i].Value = 0
+		portfolio.Positions[i].Weight = 0
+		portfolio.Positions[i].Cost = 0
+		portfolio.Positions[i].Gain = 0
+	}
+}
+
 // Analyze calculates the portfolio's performance
-func Analyze(portfolio *input.Portfolio, db *gorm.DB) {
+func Analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
 	// Combine into one?
 	portfolio.Posttaxes.Sectors = make(map[string]float64)
 	portfolio.Pretaxes.Sectors = make(map[string]float64)
 
-	// Todo: cache
-	profiles := getProfiles(portfolio.Positions, db)
 	getFinancial(portfolio.Positions)
 
 	for i, pos := range portfolio.Positions {
