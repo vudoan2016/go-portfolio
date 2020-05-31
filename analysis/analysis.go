@@ -18,47 +18,56 @@ const (
 	mutualFundETF       = "Mutual fund/ETF"
 	cash                = "Cash"
 	openingBellHour int = 8
-	pollingInterval int = 5 // 5-minute
+	refreshInterval int = 5 // 5-minute
 )
 
+// Run polls stock prices from the slice and performs basic analysis
 func Run(portfolio *input.Portfolio, db *gorm.DB) {
+	// Retrieve profile for each company from the database.
+	// If the database doesn't have the profile then use the FinHub API to get it.
 	profiles := getProfiles(portfolio.Positions, db)
-	Analyze(portfolio, profiles)
+
+	// First round
+	analyze(portfolio, profiles)
 	output.Render(*portfolio)
 
-	// schedule next poll
-	time.AfterFunc(time.Minute*time.Duration(pollingInterval), func() {
-		reset(portfolio)
-		Analyze(portfolio, profiles)
-		output.Render(*portfolio)
-	})
+	ticker := time.NewTicker(time.Duration(refreshInterval) * time.Minute)
+	for {
+		select {
+		case <-ticker.C:
+			resetPortfolio(portfolio)
+			analyze(portfolio, profiles)
+			output.Render(*portfolio)
+		}
+	}
 }
 
-func reset(portfolio *input.Portfolio) {
-	portfolio.Pretaxes.Value = 0
-	portfolio.Pretaxes.PreviousValue = 0
-	portfolio.Pretaxes.Cost = 0
-	portfolio.Pretaxes.Gain = 0
-	portfolio.Pretaxes.Cash = 0
-	portfolio.Pretaxes.TodayGain = 0
+func resetPortfolio(portfolio *input.Portfolio) {
+	resetPortfolioByType(&portfolio.Pretaxes)
+	resetPortfolioByType(&portfolio.Posttaxes)
+	resetPositions(portfolio.Positions)
+}
 
-	portfolio.Posttaxes.Value = 0
-	portfolio.Posttaxes.PreviousValue = 0
-	portfolio.Posttaxes.Cost = 0
-	portfolio.Posttaxes.Gain = 0
-	portfolio.Posttaxes.Cash = 0
-	portfolio.Posttaxes.TodayGain = 0
+func resetPortfolioByType(subPortfolio *input.Summary) {
+	subPortfolio.Value = 0
+	subPortfolio.PreviousValue = 0
+	subPortfolio.Cost = 0
+	subPortfolio.Gain = 0
+	subPortfolio.Cash = 0
+	subPortfolio.TodayGain = 0
+}
 
-	for i := range portfolio.Positions {
-		portfolio.Positions[i].Value = 0
-		portfolio.Positions[i].Weight = 0
-		portfolio.Positions[i].Cost = 0
-		portfolio.Positions[i].Gain = 0
+func resetPositions(pos []input.Position) {
+	for i := range pos {
+		pos[i].Value = 0
+		pos[i].Weight = 0
+		pos[i].Cost = 0
+		pos[i].Gain = 0
 	}
 }
 
 // Analyze calculates the portfolio's performance
-func Analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
+func analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
 	// Combine into one?
 	portfolio.Posttaxes.Sectors = make(map[string]float64)
 	portfolio.Pretaxes.Sectors = make(map[string]float64)
@@ -70,10 +79,10 @@ func Analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
 		populatePosition(&portfolio.Positions[i])
 
 		// Reflect on sector distribution
-		reflectSectorDist(portfolio.Positions[i], profiles[pos.Ticker].P.Sector, portfolio)
+		applySectorDistribution(portfolio.Positions[i], profiles[pos.Ticker].P.Sector, portfolio)
 
 		// Update portfolios
-		updateSubPortfolio(portfolio, portfolio.Positions[i])
+		analyzeSubPortfolio(portfolio, portfolio.Positions[i])
 	}
 
 	// Summarize posttaxed sectors
@@ -88,13 +97,6 @@ func Analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
 
 	// Consolidate equity's holdings into one
 	portfolio.Positions = consolidate(portfolio.Positions)
-
-	// The sub-portfolios are populated. Weigh the equities.
-	for i := range portfolio.Positions {
-		weighEquity(portfolio, &portfolio.Positions[i])
-	}
-
-	sortPositionsByWeight(portfolio.Positions)
 }
 
 // populatePosition populate value, cost & gain for each position
@@ -110,7 +112,7 @@ func populatePosition(pos *input.Position) {
 	}
 }
 
-func reflectSectorDist(pos input.Position, sectorName string, portfolio *input.Portfolio) {
+func applySectorDistribution(pos input.Position, sectorName string, portfolio *input.Portfolio) {
 	var sector map[string]float64
 
 	if pos.Type == "taxed" {
@@ -135,7 +137,7 @@ func reflectSectorDist(pos input.Position, sectorName string, portfolio *input.P
 	}
 }
 
-func updateSubPortfolio(portfolio *input.Portfolio, pos input.Position) {
+func analyzeSubPortfolio(portfolio *input.Portfolio, pos input.Position) {
 	var sub *input.Summary
 
 	if pos.Type == "taxed" {

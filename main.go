@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	// Initialize the logger
 	logger, err := os.OpenFile("info.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +35,7 @@ func main() {
 		file = os.Args[1]
 	}
 
-	// Initialize database
+	// Initialize the database
 	db := models.ConnectDataBase()
 	defer db.Close()
 
@@ -49,7 +50,7 @@ func main() {
 	output.Init()
 
 	// Poll stock prices & perform simple analysis
-	analysis.Run(&portfolio, db)
+	go analysis.Run(&portfolio, db)
 
 	// Ready to serve
 	router.GET("/", output.Respond)
