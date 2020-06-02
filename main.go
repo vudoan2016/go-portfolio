@@ -41,7 +41,12 @@ func main() {
 
 	// Initialize the router
 	router := gin.Default()
-	router.LoadHTMLGlob("output/layout.html")
+	router.LoadHTMLGlob("output/*.html")
+
+	router.Use(func(ctx *gin.Context) {
+		ctx.Set("db", db)
+		ctx.Next()
+	})
 
 	// Load portfolio data
 	portfolio := input.Get(file)
@@ -54,6 +59,7 @@ func main() {
 
 	// Ready to serve
 	router.GET("/", output.Respond)
+	router.GET("/:id", output.RespondOne)
 	router.Run()
 }
 

@@ -73,7 +73,7 @@ func Respond(ctx *gin.Context) {
 	ctx.HTML(
 		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
-		// Use the index.html template
+		// Use the layout.html template
 		"layout.html",
 		// Pass the data that the page uses
 		gin.H{
@@ -82,6 +82,19 @@ func Respond(ctx *gin.Context) {
 			"Pretaxes":  data.Pretaxes,
 			"Posttaxes": data.Posttaxes,
 			"Research":  data.Research,
+		},
+	)
+}
+
+func RespondOne(ctx *gin.Context) {
+	ctx.HTML(
+		// Set the HTTP status to 200 (OK)
+		http.StatusOK,
+		// Use the layout.html template
+		"one.html",
+		// Pass the data that the page uses
+		gin.H{
+			"Date": data.Date,
 		},
 	)
 }
