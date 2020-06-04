@@ -87,6 +87,7 @@ func Respond(ctx *gin.Context) {
 }
 
 func RespondOne(ctx *gin.Context) {
+	log.Println(ctx.Param("id"))
 	ctx.HTML(
 		// Set the HTTP status to 200 (OK)
 		http.StatusOK,

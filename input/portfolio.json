@@ -352,9 +352,18 @@
       "type": "deferred"
     },
     {
+      "symbol": "ppc",
+      "shares": 273,
+      "buydate": "2020-06-03",
+      "purchaseprice": 18.3048,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "etrade",
-      "shares": 30393.93,
-      "buydate": "2020-05-28",
+      "shares": 25396.7196,
+      "buydate": "2020-06-03",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -887,15 +896,6 @@
       "shares": 0,
       "buydate": "2020-05-11",
       "purchaseprice": 73.93,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "research"
-    },
-    {
-      "symbol": "dis",
-      "shares": 0,
-      "buydate": "2020-05-11",
-      "purchaseprice": 107.77,
       "saledate": "",
       "saleprice": 0,
       "type": "research"
