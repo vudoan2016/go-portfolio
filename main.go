@@ -55,7 +55,7 @@ func main() {
 	output.Init()
 
 	// Poll stock prices & perform simple analysis
-	go analysis.Run(&portfolio, db)
+	go analysis.Run(portfolio, db)
 
 	// Ready to serve
 	router.GET("/", output.Respond)

@@ -22,47 +22,24 @@ const (
 )
 
 // Run polls stock prices from the slice and performs basic analysis
-func Run(portfolio *input.Portfolio, db *gorm.DB) {
+func Run(portfolio input.Portfolio, db *gorm.DB) {
 	// Retrieve profile for each company from the database.
 	// If the database doesn't have the profile then use the FinHub API to get it.
 	profiles := getProfiles(portfolio.Positions, db)
 
-	// First round
-	analyze(portfolio, profiles)
-	output.Render(*portfolio)
+	// consolidate() modifies positions hence passing a copy to analyze() instead
+	tmpPortfolio := portfolio //
+	analyze(&tmpPortfolio, profiles)
+	output.Render(tmpPortfolio)
 
 	ticker := time.NewTicker(time.Duration(refreshInterval) * time.Minute)
 	for {
 		select {
 		case <-ticker.C:
-			resetPortfolio(portfolio)
-			analyze(portfolio, profiles)
-			output.Render(*portfolio)
+			tmpPortfolio := portfolio
+			analyze(&tmpPortfolio, profiles)
+			output.Render(tmpPortfolio)
 		}
-	}
-}
-
-func resetPortfolio(portfolio *input.Portfolio) {
-	resetPortfolioByType(&portfolio.Pretaxes)
-	resetPortfolioByType(&portfolio.Posttaxes)
-	resetPositions(portfolio.Positions)
-}
-
-func resetPortfolioByType(subPortfolio *input.Summary) {
-	subPortfolio.Value = 0
-	subPortfolio.PreviousValue = 0
-	subPortfolio.Cost = 0
-	subPortfolio.Gain = 0
-	subPortfolio.Cash = 0
-	subPortfolio.TodayGain = 0
-}
-
-func resetPositions(pos []input.Position) {
-	for i := range pos {
-		pos[i].Value = 0
-		pos[i].Weight = 0
-		pos[i].Cost = 0
-		pos[i].Gain = 0
 	}
 }
 
@@ -233,7 +210,6 @@ func getFinancial(positions []input.Position) {
 func getProfiles(positions []input.Position, db *gorm.DB) map[string]models.Company {
 	profiles := make(map[string]models.Company)
 
-	start := time.Now()
 	for _, pos := range positions {
 		if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
 			pos.Ticker != "etrade" && pos.Ticker != "merrill" && pos.Ticker != "payflex" &&
@@ -245,7 +221,6 @@ func getProfiles(positions []input.Position, db *gorm.DB) map[string]models.Comp
 			}
 		}
 	}
-	log.Println("getProfiles() takes", time.Since(start))
 	return profiles
 }
 
