@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <h1>{{.Date}}</h1>
+  <head>
+    <script type="text/javascript">
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.load('current', { packages: ['table']});
+        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawTable);
+
+        function createTableData(positions, active, type) {
+            var array = [];
+            var header = ["Name", "", "Price", "Price(%)", "Vol", "10D-AvgVol(%)", "3M-AvgVol(%)", "50D-MA", "200D-MA", "52w-Low(%)", "52w-High(%)", "Value($)", 
+                        "Purchase Price", "Purchase Date"];
+            if (!active) {
+            header.push("Sale Price");
+            header.push("Sale Date");
+            }                      
+            header.push("Forward PE");
+            header.push("Forward EPS");
+            header.push("TTM Yield(%)");
+            array.push(header);
+
+            for (var i = 0; i < positions.length; i++) {
+                if ((active && positions[i].Value && type == positions[i].type) ||
+                    (!active && positions[i].Value == 0 && (positions[i].type == "taxed" || positions[i].type == "deferred"))) {
+                    var row = [];
+
+                    row.push(positions[i].Name)
+                    row.push("https://finance.yahoo.com/quote/".concat(positions[i].symbol))
+                    row.push(positions[i].RegularMarketPrice);
+                    row.push(positions[i].RegularMarketChangePercent);
+                    row.push(positions[i].RegularMarketVolume);
+                    if (positions[i].AverageDailyVolume10Day > 0)
+                    row.push((positions[i].RegularMarketVolume-positions[i].AverageDailyVolume10Day)/positions[i].AverageDailyVolume10Day*100);
+                    else  
+                    row.push(0)
+                    if (positions[i].AverageDailyVolume3Month > 0)
+                    row.push((positions[i].RegularMarketVolume-positions[i].AverageDailyVolume3Month)/positions[i].AverageDailyVolume3Month*100);
+                    else
+                    row.push(0)
+                    row.push(positions[i].FiftyDayAverage);
+                    row.push(positions[i].TwoHundredDayAverage);
+                    row.push(positions[i].FiftyTwoWeekLowChangePercent*100);
+                    row.push(positions[i].FiftyTwoWeekHighChangePercent*100);
+                    row.push(positions[i].Value);
+                    row.push(positions[i].purchaseprice);
+                    row.push(positions[i].buydate);
+                    if (!active) {
+                    row.push(positions[i].saleprice);
+                    row.push(positions[i].saledate);
+                    }
+                    row.push(positions[i].ForwardPE);
+                    row.push(positions[i].ForwardEPS);
+                    row.push(positions[i].TrailingAnnualDividendYield*100);
+                    array.push(row);
+                }
+            }
+            var data = google.visualization.arrayToDataTable(array);
+
+            var formatter = new google.visualization.PatternFormat('<a href="{1}">{0}</a>');
+            // Apply formatter and set the formatted value of the first column.
+            formatter.format(data, [0, 1]);
+            var view = new google.visualization.DataView(data);
+            if (!active) {
+            view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]); // TODO: Better way to skip 2nd column?
+            } else {
+            view.setColumns([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+            }
+            return view
+        }
+    </script>
+  </head>
+</html>

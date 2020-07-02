@@ -86,13 +86,13 @@ func Respond(ctx *gin.Context) {
 	)
 }
 
-func RespondOne(ctx *gin.Context) {
+func RespondEquity(ctx *gin.Context) {
 	log.Println(ctx.Param("id"))
 	ctx.HTML(
 		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
 		// Use the layout.html template
-		"one.html",
+		"equity.html",
 		// Pass the data that the page uses
 		gin.H{
 			"Date": data.Date,

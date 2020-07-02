@@ -12,6 +12,7 @@ import (
 
 type Portfolio struct {
 	Positions []Position `json:"companies"`
+	Equities  map[string][]Position
 	Pretaxes  Summary
 	Posttaxes Summary
 }
@@ -77,5 +78,8 @@ func Get(fileName string) Portfolio {
 		log.Println(err)
 	}
 	jsonFile.Close()
+	for _, pos := range portfolio.Positions {
+		portfolio.Equities[pos.Ticker] = append(portfolio.Equities[pos.Ticker], pos)
+	}
 	return portfolio
 }
