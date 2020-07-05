@@ -10,14 +10,25 @@ import (
 	"github.com/piquette/finance-go"
 )
 
+const (
+	investment int = 0
+	deferred   int = 1
+	research   int = 2
+	reportSize int = 3
+)
+
 type Portfolio struct {
-	Positions []Position `json:"companies"`
-	Equities  map[string][]Position
-	Pretaxes  Summary
-	Posttaxes Summary
+	Positions map[PositionKey][]Position
+	Reports   [reportSize]Report
 }
 
-type Summary struct {
+type PositionKey struct {
+	Ticker string
+	Type   string
+	Active bool
+}
+
+type Report struct {
 	Value         float64
 	PreviousValue float64
 	Cost          float64
@@ -56,6 +67,8 @@ type Position struct {
 
 	// Analysis fields
 	Name              string
+	TaxType           int
+	Active            bool
 	Value             float64
 	Weight            float64
 	Cost              float64
@@ -64,22 +77,48 @@ type Position struct {
 	RegularMarketTime time.Time
 }
 
+type portfolio struct {
+	Positions []Position `json:"companies"`
+}
+
 // Get portfolio from a json file
 func Get(fileName string) Portfolio {
 	jsonFile, err := os.Open(fileName)
 	if err != nil {
 		log.Println(fileName, err)
 	}
-	byteStream, _ := ioutil.ReadAll(jsonFile)
+	defer jsonFile.Close()
 
-	var portfolio Portfolio
-	err = json.Unmarshal(byteStream, &portfolio)
+	var p portfolio
+	byteStream, _ := ioutil.ReadAll(jsonFile)
+	err = json.Unmarshal(byteStream, &p)
 	if err != nil {
 		log.Println(err)
 	}
-	jsonFile.Close()
-	for _, pos := range portfolio.Positions {
-		portfolio.Equities[pos.Ticker] = append(portfolio.Equities[pos.Ticker], pos)
+
+	var portfolio Portfolio
+	portfolio.Positions = make(map[PositionKey][]Position)
+	for _, pos := range p.Positions {
+		switch pos.Type {
+		case "taxed":
+			pos.TaxType = investment
+		case "deferred":
+			pos.TaxType = deferred
+		case "research":
+			pos.TaxType = research
+		}
+		switch pos.SaleDate {
+		case "":
+			pos.Active = true
+		default:
+			pos.Active = false
+		}
+		key := PositionKey{Ticker: pos.Ticker, Type: pos.Type, Active: pos.Active}
+		portfolio.Positions[key] = append(portfolio.Positions[key], pos)
 	}
+	for i := range portfolio.Reports {
+		portfolio.Reports[i].Sectors = make(map[string]float64)
+	}
+
 	return portfolio
 }

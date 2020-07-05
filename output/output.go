@@ -2,7 +2,6 @@ package output
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"time"
 
@@ -10,16 +9,21 @@ import (
 	"github.com/vudoan2016/portfolio/input"
 )
 
+const (
+	investment int = 0
+	deferred   int = 1
+	research   int = 2
+	reportSize int = 3
+)
+
 type page struct {
 	Date      string
 	t         *template.Template
-	Positions []input.Position
-	Pretaxes  portfolio
-	Posttaxes portfolio
-	Research  portfolio
+	Reports   [reportSize]report
+	Positions map[input.PositionKey][]input.Position
 }
 
-type portfolio struct {
+type report struct {
 	Sectors   []sector
 	Value     float64 // market value of portfolio
 	Gain      float64 // overall gain
@@ -34,41 +38,41 @@ type sector struct {
 
 var data page
 
-func Init() {
-	t, err := template.ParseFiles("output/layout.html")
-	if err != nil {
-		log.Println("Failed to parse file", err)
-	} else {
-		data.t = template.Must(t, err)
-		if err != nil {
-			log.Println(err)
+// Combine lots of the same holding
+func consolidate(pos []input.Position) input.Position {
+	consolidated := pos[0]
+
+	for _, p := range pos[1:] {
+		if (p.SaleDate == "" && consolidated.SaleDate == "") || (p.SaleDate != "" && consolidated.SaleDate != "") {
+			consolidated.Shares += p.Shares
+			consolidated.Gain += p.Gain
+			consolidated.Cost += p.Cost
+			consolidated.Value += p.Value
 		}
 	}
+	return consolidated
 }
 
 // Render formats the data & writes it to a html file
 func Render(p input.Portfolio) {
 	data.Date = time.Now().Format("Mon Jan 2 15:04:05 2006")
-	data.Pretaxes = portfolio{Value: p.Pretaxes.Value,
-		Gain:      p.Pretaxes.Gain,
-		Cash:      p.Pretaxes.Cash,
-		TodayGain: p.Pretaxes.TodayGain}
-	data.Posttaxes = portfolio{Value: p.Posttaxes.Value,
-		Gain:      p.Posttaxes.Gain,
-		Cash:      p.Posttaxes.Cash,
-		TodayGain: p.Posttaxes.TodayGain}
+	for i := 0; i < reportSize-1; i++ {
+		data.Reports[i] = report{Value: p.Reports[i].Value,
+			Gain:      p.Reports[i].Gain,
+			Cash:      p.Reports[i].Cash,
+			TodayGain: p.Reports[i].TodayGain}
+		for key, value := range p.Reports[i].Sectors {
+			data.Reports[i].Sectors = append(data.Reports[i].Sectors, sector{Name: key, Value: value})
+		}
+	}
 	data.Positions = p.Positions
-
-	for key, value := range p.Posttaxes.Sectors {
-		data.Posttaxes.Sectors = append(data.Posttaxes.Sectors, sector{Name: key, Value: value})
-	}
-
-	for key, value := range p.Pretaxes.Sectors {
-		data.Pretaxes.Sectors = append(data.Pretaxes.Sectors, sector{Name: key, Value: value})
-	}
 }
 
 func Respond(ctx *gin.Context) {
+	var positions []input.Position
+	for _, position := range data.Positions {
+		positions = append(positions, consolidate(position))
+	}
 	// Call the HTML method of the Context to render a template
 	ctx.HTML(
 		// Set the HTTP status to 200 (OK)
@@ -78,16 +82,15 @@ func Respond(ctx *gin.Context) {
 		// Pass the data that the page uses
 		gin.H{
 			"Date":      data.Date,
-			"Positions": data.Positions,
-			"Pretaxes":  data.Pretaxes,
-			"Posttaxes": data.Posttaxes,
-			"Research":  data.Research,
+			"Positions": positions,
+			"Pretaxes":  data.Reports[deferred],
+			"Posttaxes": data.Reports[investment],
+			"Research":  data.Reports[research],
 		},
 	)
 }
 
 func RespondEquity(ctx *gin.Context) {
-	log.Println(ctx.Param("id"))
 	ctx.HTML(
 		// Set the HTTP status to 200 (OK)
 		http.StatusOK,
@@ -95,7 +98,8 @@ func RespondEquity(ctx *gin.Context) {
 		"equity.html",
 		// Pass the data that the page uses
 		gin.H{
-			"Date": data.Date,
+			"Date":   data.Date,
+			"Equity": data.Positions[input.PositionKey{Ticker: ctx.Param("id"), Type: ctx.Param("type"), Active: true}],
 		},
 	)
 }

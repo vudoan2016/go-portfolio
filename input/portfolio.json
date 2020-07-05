@@ -13,7 +13,7 @@
       "symbol": "msft",
       "shares": 319,
       "buydate": "2018-01-29",
-      "purchaseprice": 93.84,
+      "purchaseprice": 93.83,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -30,8 +30,17 @@
     {
       "symbol": "msft",
       "shares": 238,
-      "buydate": "2017--11-27",
+      "buydate": "2017-11-27",
       "purchaseprice": 83.86,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
+      "symbol": "msft",
+      "shares": 0.799,
+      "buydate": "2020-06-09",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -111,7 +120,7 @@
     {
       "symbol": "csco",
       "shares": 8.421,
-      "buydate": "2020-0420",
+      "buydate": "2020-04-20",
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
@@ -371,7 +380,7 @@
     },
     {
       "symbol": "c",
-      "shares":202,
+      "shares": 202,
       "buydate": "2020-06-11",
       "purchaseprice": 49.315,
       "saledate": "",
@@ -398,8 +407,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 995.1,
-      "buydate": "2020-06-12",
+      "shares": 1395.06,
+      "buydate": "2020-07-04",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -407,8 +416,8 @@
     },
     {
       "symbol": "fidelity",
-      "shares": 152.67,
-      "buydate": "2020-04-24",
+      "shares": 555.38,
+      "buydate": "2020-07-04",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -982,15 +991,6 @@
       "type": "taxed"
     },
     {
-      "symbol": "dri",
-      "shares": 0,
-      "buydate": "2020-05-11",
-      "purchaseprice": 73.93,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "research"
-    },
-    {
       "symbol": "tm",
       "shares": 0,
       "buydate": "2020-05-20",
@@ -1018,19 +1018,118 @@
       "type": "research"
     },
     {
-      "symbol": "mdt",
+      "symbol": "evbg",
       "shares": 0,
-      "buydate": "2020-05-10",
-      "purchaseprice": 99.03,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "research"
     },
     {
-      "symbol": "fb",
+      "symbol": "wing",
       "shares": 0,
-      "buydate": "2020-05-20",
-      "purchaseprice": 229.97,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "gpn",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "nem",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "sq",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "pypl",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "shop",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "bj",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "vrtx",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "tdoc",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "dxcm",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "spsc",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "research"
+    },
+    {
+      "symbol": "holx",
+      "shares": 0,
+      "buydate": "2020-07-04",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "research"

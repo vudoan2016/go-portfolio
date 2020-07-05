@@ -51,16 +51,13 @@ func main() {
 	// Load portfolio data
 	portfolio := input.Get(file)
 
-	// Initialize the output module to render template
-	output.Init()
-
 	// Poll stock prices & perform simple analysis
 	go analysis.Run(portfolio, db)
 
 	// Ready to serve
 	router.GET("/", output.Respond)
-	router.GET("/:id", output.RespondOne)
-	router.Run()
+	router.GET("/:id/:type", output.RespondEquity)
+	router.Run(":8080")
 }
 
 // Find file in current directory and level-1 subdirectories

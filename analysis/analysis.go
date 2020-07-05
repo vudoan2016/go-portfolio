@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"log"
-	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -28,7 +27,7 @@ func Run(portfolio input.Portfolio, db *gorm.DB) {
 	profiles := getProfiles(portfolio.Positions, db)
 
 	// consolidate() modifies positions hence passing a copy to analyze() instead
-	tmpPortfolio := portfolio //
+	tmpPortfolio := portfolio
 	analyze(&tmpPortfolio, profiles)
 	output.Render(tmpPortfolio)
 
@@ -45,35 +44,29 @@ func Run(portfolio input.Portfolio, db *gorm.DB) {
 
 // Analyze calculates the portfolio's performance
 func analyze(portfolio *input.Portfolio, profiles map[string]models.Company) {
-	// Combine into one?
-	portfolio.Posttaxes.Sectors = make(map[string]float64)
-	portfolio.Pretaxes.Sectors = make(map[string]float64)
-
-	getFinancial(portfolio.Positions)
-
-	for i, pos := range portfolio.Positions {
-		// Populate holding's financial data
-		populatePosition(&portfolio.Positions[i])
-
-		// Reflect on sector distribution
-		applySectorDistribution(portfolio.Positions[i], profiles[pos.Ticker].P.Sector, portfolio)
-
-		// Update portfolios
-		analyzeSubPortfolio(portfolio, portfolio.Positions[i])
+	for _, position := range portfolio.Positions {
+		getFinancial(position)
+		for i := range position {
+			populatePosition(&position[i])
+		}
 	}
 
-	// Summarize posttaxed sectors
-	for sector := range portfolio.Posttaxes.Sectors {
-		portfolio.Posttaxes.Sectors[sector] = 100 * portfolio.Posttaxes.Sectors[sector] / portfolio.Posttaxes.Value
+	// Update portfolios
+	for key, position := range portfolio.Positions {
+		for _, holding := range position {
+			// Update portfolios
+			analyzePortfolio(portfolio, holding)
+			// Reflect on sector distribution
+			applySectorDistribution(holding, profiles[key.Ticker].P.Sector, portfolio)
+		}
 	}
 
-	// Summarize pretaxed sectors
-	for sector := range portfolio.Pretaxes.Sectors {
-		portfolio.Pretaxes.Sectors[sector] = 100 * portfolio.Pretaxes.Sectors[sector] / portfolio.Pretaxes.Value
+	// Run report for sectors
+	for i := range portfolio.Reports {
+		for sector := range portfolio.Reports[i].Sectors {
+			portfolio.Reports[i].Sectors[sector] = 100 * portfolio.Reports[i].Sectors[sector] / portfolio.Reports[i].Value
+		}
 	}
-
-	// Consolidate equity's holdings into one
-	portfolio.Positions = consolidate(portfolio.Positions)
 }
 
 // populatePosition populate value, cost & gain for each position
@@ -90,16 +83,7 @@ func populatePosition(pos *input.Position) {
 }
 
 func applySectorDistribution(pos input.Position, sectorName string, portfolio *input.Portfolio) {
-	var sector map[string]float64
-
-	if pos.Type == "taxed" {
-		sector = portfolio.Posttaxes.Sectors
-	} else if pos.Type == "deferred" {
-		sector = portfolio.Pretaxes.Sectors
-	} else { // research type
-		return
-	}
-
+	sector := portfolio.Reports[pos.TaxType].Sectors
 	if pos.SaleDate == "" {
 		if len(sectorName) > 0 {
 			sector[sectorName] += pos.Value
@@ -114,23 +98,15 @@ func applySectorDistribution(pos input.Position, sectorName string, portfolio *i
 	}
 }
 
-func analyzeSubPortfolio(portfolio *input.Portfolio, pos input.Position) {
-	var sub *input.Summary
+func analyzePortfolio(portfolio *input.Portfolio, pos input.Position) {
+	report := &portfolio.Reports[pos.TaxType]
 
-	if pos.Type == "taxed" {
-		sub = &portfolio.Posttaxes
-	} else if pos.Type == "deferred" {
-		sub = &portfolio.Pretaxes
-	} else { // research type
-		return
-	}
-
-	sub.Cost += pos.Cost
-	sub.Gain += pos.Gain
-	sub.Value += pos.Value
-	sub.TodayGain += calcTodayGain(pos)
+	report.Cost += pos.Cost
+	report.Gain += pos.Gain
+	report.Value += pos.Value
+	report.TodayGain += calcTodayGain(pos)
 	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
-		sub.Cash += pos.Value
+		report.Cash += pos.Value
 	}
 }
 
@@ -142,7 +118,8 @@ func calcTodayGain(pos input.Position) float64 {
 			// Mutual funds are not updated until around 15:00 PDT on trading days.
 			// Todo: weekend & holidays?
 			(pos.QuoteType == finance.QuoteTypeMutualFund &&
-				pos.MarketState != finance.MarketStateRegular && pos.RegularMarketTime.Hour() > openingBellHour)) {
+				pos.MarketState != finance.MarketStateRegular &&
+				pos.RegularMarketTime.Hour() > openingBellHour)) {
 		gain = pos.RegularMarketChangePercent * pos.RegularMarketPreviousClose * pos.Shares / 100
 	}
 	return gain
@@ -152,11 +129,7 @@ func weighEquity(portfolio *input.Portfolio, pos *input.Position) {
 	if pos.Type == "deferred" || pos.Type == "taxed" {
 		// Average buy price
 		pos.BuyPrice = pos.Cost / pos.Shares
-		if pos.Type == "taxed" {
-			pos.Weight = pos.Value / portfolio.Posttaxes.Value * 100
-		} else {
-			pos.Weight = pos.Value / portfolio.Pretaxes.Value * 100
-		}
+		pos.Weight = pos.Value / portfolio.Reports[pos.TaxType].Value * 100
 	}
 }
 
@@ -166,7 +139,8 @@ func getFinancial(positions []input.Position) {
 
 	start := time.Now()
 	for index, pos := range positions {
-		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
+		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" ||
+			pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
 			positions[index].Name = pos.Ticker
 			positions[index].RegularMarketPrice = pos.BuyPrice
 		} else {
@@ -207,60 +181,18 @@ func getFinancial(positions []input.Position) {
 	log.Println("getFinancial() takes", time.Since(start))
 }
 
-func getProfiles(positions []input.Position, db *gorm.DB) map[string]models.Company {
+func getProfiles(positions map[input.PositionKey][]input.Position, db *gorm.DB) map[string]models.Company {
 	profiles := make(map[string]models.Company)
 
-	for _, pos := range positions {
-		if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
-			pos.Ticker != "etrade" && pos.Ticker != "merrill" && pos.Ticker != "payflex" &&
-			pos.Ticker != "vinix" && pos.Ticker != "sdscx" && pos.Ticker != "vig" &&
-			pos.Ticker != "seegx" && pos.Ticker != "sflnx" &&
-			pos.SaleDate == "" {
-			if _, exist := profiles[pos.Ticker]; !exist {
-				profiles[pos.Ticker] = finhub.GetProfile(pos.Ticker, db)
+	for key := range positions {
+		if key.Ticker != "fidelity" && key.Ticker != "vanguard" &&
+			key.Ticker != "etrade" && key.Ticker != "merrill" && key.Ticker != "payflex" &&
+			key.Ticker != "vinix" && key.Ticker != "sdscx" && key.Ticker != "vig" &&
+			key.Ticker != "seegx" && key.Ticker != "sflnx" {
+			if _, exist := profiles[key.Ticker]; !exist {
+				profiles[key.Ticker] = finhub.GetProfile(key.Ticker, db)
 			}
 		}
 	}
 	return profiles
-}
-
-type positions []input.Position
-
-func (c positions) Len() int {
-	return len(c)
-}
-
-func (c positions) Less(i, j int) bool {
-	return c[i].Weight < c[j].Weight
-}
-
-func (c positions) Swap(i, j int) {
-	c[i], c[j] = c[j], c[i]
-}
-
-func sortPositionsByWeight(pos []input.Position) {
-	sort.Sort(sort.Reverse(positions(pos)))
-}
-
-// Combine lots of the same holding
-func consolidate(pos positions) positions {
-	var consolidated positions
-
-	for _, p := range pos {
-		found := false
-		for i, c := range consolidated {
-			if p.Ticker == c.Ticker && p.Type == c.Type &&
-				((p.SaleDate == "" && c.SaleDate == "") || (p.SaleDate != "" && c.SaleDate != "")) {
-				consolidated[i].Shares += p.Shares
-				consolidated[i].Gain += p.Gain
-				consolidated[i].Cost += p.Cost
-				consolidated[i].Value += p.Value
-				found = true
-			}
-		}
-		if !found {
-			consolidated = append(consolidated, p)
-		}
-	}
-	return consolidated
 }
