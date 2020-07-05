@@ -83,7 +83,7 @@ func populatePosition(pos *input.Position) {
 }
 
 func applySectorDistribution(pos input.Position, sectorName string, portfolio *input.Portfolio) {
-	sector := portfolio.Reports[pos.TaxType].Sectors
+	sector := portfolio.Reports[input.ConvertTypeToVal(pos.Type)].Sectors
 	if pos.SaleDate == "" {
 		if len(sectorName) > 0 {
 			sector[sectorName] += pos.Value
@@ -99,7 +99,7 @@ func applySectorDistribution(pos input.Position, sectorName string, portfolio *i
 }
 
 func analyzePortfolio(portfolio *input.Portfolio, pos input.Position) {
-	report := &portfolio.Reports[pos.TaxType]
+	report := &portfolio.Reports[input.ConvertTypeToVal(pos.Type)]
 
 	report.Cost += pos.Cost
 	report.Gain += pos.Gain
@@ -129,7 +129,7 @@ func weighEquity(portfolio *input.Portfolio, pos *input.Position) {
 	if pos.Type == "deferred" || pos.Type == "taxed" {
 		// Average buy price
 		pos.BuyPrice = pos.Cost / pos.Shares
-		pos.Weight = pos.Value / portfolio.Reports[pos.TaxType].Value * 100
+		pos.Weight = pos.Value / portfolio.Reports[input.ConvertTypeToVal(pos.Type)].Value * 100
 	}
 }
 

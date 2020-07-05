@@ -24,7 +24,7 @@ type Portfolio struct {
 
 type PositionKey struct {
 	Ticker string
-	Type   string
+	Type   int
 	Active bool
 }
 
@@ -67,7 +67,6 @@ type Position struct {
 
 	// Analysis fields
 	Name              string
-	TaxType           int
 	Active            bool
 	Value             float64
 	Weight            float64
@@ -79,6 +78,30 @@ type Position struct {
 
 type portfolio struct {
 	Positions []Position `json:"companies"`
+}
+
+func ConvertTypeToVal(t string) int {
+	var val int
+	switch t {
+	case "taxed":
+		val = investment
+	case "deferred":
+		val = deferred
+	case "research":
+		val = research
+	}
+	return val
+}
+
+func isActive(saleDate string) bool {
+	var active bool
+	switch saleDate {
+	case "":
+		active = true
+	default:
+		active = false
+	}
+	return active
 }
 
 // Get portfolio from a json file
@@ -99,22 +122,16 @@ func Get(fileName string) Portfolio {
 	var portfolio Portfolio
 	portfolio.Positions = make(map[PositionKey][]Position)
 	for _, pos := range p.Positions {
-		switch pos.Type {
-		case "taxed":
-			pos.TaxType = investment
-		case "deferred":
-			pos.TaxType = deferred
-		case "research":
-			pos.TaxType = research
-		}
-		switch pos.SaleDate {
-		case "":
-			pos.Active = true
-		default:
-			pos.Active = false
-		}
-		key := PositionKey{Ticker: pos.Ticker, Type: pos.Type, Active: pos.Active}
+		key := PositionKey{Ticker: pos.Ticker, Type: ConvertTypeToVal(pos.Type), Active: isActive(pos.SaleDate)}
 		portfolio.Positions[key] = append(portfolio.Positions[key], pos)
+
+		for i := range portfolio.Positions[key] {
+			if pos.BuyDate < portfolio.Positions[key][i].BuyDate {
+				copy(portfolio.Positions[key][i+1:], portfolio.Positions[key][i:])
+				portfolio.Positions[key][i] = pos
+				break
+			}
+		}
 	}
 	for i := range portfolio.Reports {
 		portfolio.Reports[i].Sectors = make(map[string]float64)

@@ -98,8 +98,9 @@ func RespondEquity(ctx *gin.Context) {
 		"equity.html",
 		// Pass the data that the page uses
 		gin.H{
-			"Date":   data.Date,
-			"Equity": data.Positions[input.PositionKey{Ticker: ctx.Param("id"), Type: ctx.Param("type"), Active: true}],
+			"Date": data.Date,
+			"Equity": data.Positions[input.PositionKey{Ticker: ctx.Param("id"),
+				Type: input.ConvertTypeToVal(ctx.Param("type")), Active: true}],
 		},
 	)
 }
