@@ -101,9 +101,9 @@
     },
     {
       "symbol": "vinix",
-      "shares": 194.199,
-      "buydate": "2020-05-29",
-      "purchaseprice": 292.3169,
+      "shares": 202.31,
+      "buydate": "2020-07-16",
+      "purchaseprice": 286.88,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -407,8 +407,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 1395.06,
-      "buydate": "2020-07-04",
+      "shares": 1430.94,
+      "buydate": "2020-07-17",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -416,8 +416,8 @@
     },
     {
       "symbol": "fidelity",
-      "shares": 555.38,
-      "buydate": "2020-07-04",
+      "shares": 563.3,
+      "buydate": "2020-07-17",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -830,8 +830,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 40301.86,
-      "buydate": "2020-06-11",
+      "shares": 32184.05,
+      "buydate": "2020-07-17",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
