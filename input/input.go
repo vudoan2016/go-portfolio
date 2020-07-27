@@ -40,7 +40,7 @@ type Report struct {
 }
 
 type Position struct {
-	Ticker    string  `json:"symbol"`
+	Ticker    string  `json:"Symbol"`
 	Shares    float64 `json:"shares"`
 	BuyDate   string  `json:"buydate"`
 	BuyPrice  float64 `json:"purchaseprice"`
@@ -49,13 +49,13 @@ type Position struct {
 	Type      string  `json:"type"`
 
 	// Populate using piquette library
-	RegularMarketPrice            float64
+	RegularMarketPrice            float64 `json:"RegularMarketPrice"`
 	ForwardPE                     float64
 	ForwardEPS                    float64
 	TrailingAnnualDividendYield   float64
 	FiftyDayAverage               float64
 	TwoHundredDayAverage          float64
-	RegularMarketChangePercent    float64
+	RegularMarketChangePercent    float64 `json:"RegularMarketChangePercent"`
 	MarketState                   finance.MarketState
 	QuoteType                     finance.QuoteType
 	RegularMarketPreviousClose    float64
@@ -67,11 +67,10 @@ type Position struct {
 
 	// Analysis fields
 	Name              string
-	Active            bool
-	Value             float64
+	Value             float64 `json:"Value"`
 	Weight            float64
-	Cost              float64
-	Gain              float64
+	Cost              float64 `json:"Cost"`
+	Gain              float64 `json:"Gain"`
 	EarningsTimestamp string
 	RegularMarketTime time.Time
 }

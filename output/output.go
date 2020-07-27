@@ -3,6 +3,7 @@ package output
 import (
 	"html/template"
 	"net/http"
+	"sort"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -43,12 +44,10 @@ func consolidate(pos []input.Position) input.Position {
 	consolidated := pos[0]
 
 	for _, p := range pos[1:] {
-		if (p.SaleDate == "" && consolidated.SaleDate == "") || (p.SaleDate != "" && consolidated.SaleDate != "") {
-			consolidated.Shares += p.Shares
-			consolidated.Gain += p.Gain
-			consolidated.Cost += p.Cost
-			consolidated.Value += p.Value
-		}
+		consolidated.Shares += p.Shares
+		consolidated.Gain += p.Gain
+		consolidated.Cost += p.Cost
+		consolidated.Value += p.Value
 	}
 	return consolidated
 }
@@ -68,39 +67,100 @@ func Render(p input.Portfolio) {
 	data.Positions = p.Positions
 }
 
+type positions []input.Position
+
+func (c positions) Len() int {
+	return len(c)
+}
+
+func (c positions) Less(i, j int) bool {
+	return c[i].RegularMarketChangePercent < c[j].RegularMarketChangePercent
+}
+
+func (c positions) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
+func sortByRegularMarketChangePercent(pos positions) {
+	sort.Sort(sort.Reverse(positions(pos)))
+}
+
+const (
+	none   int = 1
+	active int = 2
+)
+
+type fn func(pos positions)
+
+// Returns a slice of consolidated (combined lots of the same asset) positions.
+func filterPositions(pos map[input.PositionKey][]input.Position, filter int, sortFn fn) positions {
+	var positions []input.Position
+
+	switch filter {
+	case none:
+		for _, p := range pos {
+			positions = append(positions, consolidate(p))
+		}
+	case active:
+		for key, p := range pos {
+			if key.Active == true {
+				positions = append(positions, consolidate(p))
+				sortFn(positions)
+			}
+		}
+	}
+	return positions
+}
+
+// Respond processes '/' route
 func Respond(ctx *gin.Context) {
 	var positions []input.Position
-	for _, position := range data.Positions {
-		positions = append(positions, consolidate(position))
+
+	switch ctx.Request.Header.Get("Accept") {
+	case "application/json":
+		positions = filterPositions(data.Positions, active, sortByRegularMarketChangePercent)
+		ctx.JSON(http.StatusOK, positions)
+	default:
+		positions = filterPositions(data.Positions, none, nil)
+
+		// Call the HTML method of the Context to render a template
+		ctx.HTML(
+			// Set the HTTP status to 200 (OK)
+			http.StatusOK,
+			// Use the layout.html template
+			"layout.html",
+			// Pass the data that layout.html uses
+			gin.H{
+				"Date":      data.Date,
+				"Positions": positions,
+				"Pretaxes":  data.Reports[deferred],
+				"Posttaxes": data.Reports[investment],
+				"Research":  data.Reports[research],
+			},
+		)
 	}
-	// Call the HTML method of the Context to render a template
-	ctx.HTML(
-		// Set the HTTP status to 200 (OK)
-		http.StatusOK,
-		// Use the layout.html template
-		"layout.html",
-		// Pass the data that the page uses
-		gin.H{
-			"Date":      data.Date,
-			"Positions": positions,
-			"Pretaxes":  data.Reports[deferred],
-			"Posttaxes": data.Reports[investment],
-			"Research":  data.Reports[research],
-		},
-	)
 }
 
 func RespondEquity(ctx *gin.Context) {
-	ctx.HTML(
-		// Set the HTTP status to 200 (OK)
-		http.StatusOK,
-		// Use the layout.html template
-		"equity.html",
-		// Pass the data that the page uses
-		gin.H{
-			"Date": data.Date,
-			"Equity": data.Positions[input.PositionKey{Ticker: ctx.Param("id"),
-				Type: input.ConvertTypeToVal(ctx.Param("type")), Active: true}],
-		},
-	)
+	switch ctx.Request.Header.Get("Accept") {
+	case "application/json":
+		// Respond with JSON format
+		pos := data.Positions[input.PositionKey{Ticker: ctx.Param("id"),
+			Type: input.ConvertTypeToVal(ctx.Param("type")), Active: true}]
+		ctx.JSON(http.StatusOK, pos)
+	default:
+		// Respond with HTML format
+		ctx.HTML(
+			// Set the HTTP status to 200 (OK)
+			http.StatusOK,
+			// Use the equity.html template
+			"equity.html",
+			// Pass the data that equity.html uses
+			gin.H{
+				"Date": data.Date,
+				"Equity": data.Positions[input.PositionKey{Ticker: ctx.Param("id"),
+					Type: input.ConvertTypeToVal(ctx.Param("type")), Active: true}],
+			},
+		)
+	}
 }
