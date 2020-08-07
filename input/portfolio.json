@@ -407,8 +407,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 1430.94,
-      "buydate": "2020-07-17",
+      "shares": 26.99,
+      "buydate": "2020-08-06",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -428,6 +428,15 @@
       "shares": 1000,
       "buydate": "2020-04-10",
       "purchaseprice": 1,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
+      "symbol": "holx",
+      "shares": 20,
+      "buydate": "2020-08-06",
+      "purchaseprice": 70.1975,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
