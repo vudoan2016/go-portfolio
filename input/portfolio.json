@@ -101,9 +101,9 @@
     },
     {
       "symbol": "vinix",
-      "shares": 202.31,
-      "buydate": "2020-07-16",
-      "purchaseprice": 286.88,
+      "shares": 212.462,
+      "buydate": "2020-08-28",
+      "purchaseprice": 262.2615,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
@@ -128,16 +128,16 @@
     },
     {
       "symbol": "aapl",
-      "shares": 103,
+      "shares": 412,
       "buydate": "2017-11-27",
-      "purchaseprice": 174.21,
+      "purchaseprice": 43.55,
       "saledate": "",
       "saleprice": 0,
       "type": "deferred"
     },
     {
       "symbol": "aapl",
-      "shares": 0.266,
+      "shares": 1.824,
       "buydate": "2020-05-12",
       "purchaseprice": 0,
       "saledate": "",
@@ -704,9 +704,18 @@
     },
     {
       "symbol": "aapl",
-      "shares": 40,
+      "shares": 160,
       "buydate": "2020-03-20",
-      "purchaseprice": 245,
+      "purchaseprice": 61.25,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
+      "symbol": "aapl",
+      "shares": 0.72,
+      "buydate": "2020-08-31",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "taxed"
