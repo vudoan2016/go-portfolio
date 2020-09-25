@@ -343,6 +343,15 @@
       "type": "deferred"
     },
     {
+      "symbol": "seegx",
+      "shares": 29.571,
+      "buydate": "2020-09-09",
+      "purchaseprice": 55.29,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "sflnx",
       "shares": 193.762,
       "buydate": "2018-11-13",
