@@ -92,7 +92,7 @@
     },
     {
       "symbol": "sdscx",
-      "shares": 1665.883,
+      "shares": 1727.202,
       "buydate": "2020-05-18",
       "purchaseprice": 20.72,
       "saledate": "",
@@ -101,7 +101,7 @@
     },
     {
       "symbol": "vinix",
-      "shares": 212.462,
+      "shares": 213.354,
       "buydate": "2020-08-28",
       "purchaseprice": 262.2615,
       "saledate": "",
@@ -416,7 +416,7 @@
     },
     {
       "symbol": "etrade",
-      "shares": 26.99,
+      "shares": 1097.72,
       "buydate": "2020-08-06",
       "purchaseprice": 1,
       "saledate": "",
@@ -425,7 +425,7 @@
     },
     {
       "symbol": "fidelity",
-      "shares": 563.3,
+      "shares": 0.77,
       "buydate": "2020-07-17",
       "purchaseprice": 1,
       "saledate": "",
@@ -451,6 +451,15 @@
       "type": "deferred"
     },
     {
+      "symbol": "intc",
+      "shares": 18.908,
+      "buydate": "2020-10-02",
+      "purchaseprice": 51.03,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "vig",
       "shares": 538.822,
       "buydate": "2017-11-07",
@@ -461,8 +470,8 @@
     },
     {
       "symbol": "vig",
-      "shares": 2.436,
-      "buydate": "2020-3-31",
+      "shares": 5.175,
+      "buydate": "2020-10-02",
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
@@ -641,7 +650,7 @@
     },
     {
       "symbol": "c",
-      "shares": 137,
+      "shares": 139.917,
       "buydate": "2020-02-24",
       "purchaseprice": 72.53,
       "saledate": "",
@@ -695,7 +704,7 @@
     },
     {
       "symbol": "wm",
-      "shares": 100,
+      "shares": 100.988,
       "buydate": "2020-03-20",
       "purchaseprice": 98,
       "saledate": "",
@@ -848,7 +857,7 @@
     },
     {
       "symbol": "merrill",
-      "shares": 134.58,
+      "shares": 310.00,
       "buydate": "2020-05-28",
       "purchaseprice": 1,
       "saledate": "",
@@ -857,8 +866,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 32184.05,
-      "buydate": "2020-07-17",
+      "shares": 41000,
+      "buydate": "2020-10-02",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
