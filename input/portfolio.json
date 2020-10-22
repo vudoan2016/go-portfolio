@@ -416,8 +416,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 1097.72,
-      "buydate": "2020-08-06",
+      "shares": 29.58,
+      "buydate": "2020-10-15",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -452,6 +452,14 @@
     },
     {
       "symbol": "holx",
+      "shares": 17,
+      "buydate": "2020-10-15",
+      "purchaseprice": 65.45,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "deferred"
+    },
+    {
       "symbol": "intc",
       "shares": 18.908,
       "buydate": "2020-10-02",
@@ -1155,15 +1163,6 @@
     },
     {
       "symbol": "spsc",
-      "shares": 0,
-      "buydate": "2020-07-04",
-      "purchaseprice": 0,
-      "saledate": "",
-      "saleprice": 0,
-      "type": "research"
-    },
-    {
-      "symbol": "holx",
       "shares": 0,
       "buydate": "2020-07-04",
       "purchaseprice": 0,
