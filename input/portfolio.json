@@ -38,8 +38,8 @@
     },
     {
       "symbol": "msft",
-      "shares": 0.799,
-      "buydate": "2020-06-09",
+      "shares": 1.531,
+      "buydate": "2020-11-13",
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
@@ -92,8 +92,8 @@
     },
     {
       "symbol": "sdscx",
-      "shares": 1754.792,
-      "buydate": "2020-05-18",
+      "shares": 2020.678,
+      "buydate": "2020-12-04",
       "purchaseprice": 20.72,
       "saledate": "",
       "saleprice": 0,
@@ -119,8 +119,8 @@
     },
     {
       "symbol": "csco",
-      "shares": 8.421,
-      "buydate": "2020-04-20",
+      "shares": 16.196,
+      "buydate": "2020-11-13",
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
@@ -146,11 +146,20 @@
     },
     {
       "symbol": "abmd",
-      "shares": 140,
+      "shares": 40,
       "buydate": "2019-07-31",
       "purchaseprice": 279.86,
       "saledate": "",
       "saleprice": 0,
+      "type": "deferred"
+    },
+    {
+      "symbol": "abmd",
+      "shares": 100,
+      "buydate": "2019-07-31",
+      "purchaseprice": 279.86,
+      "saledate": "2020-12-16",
+      "saleprice": 281.375,
       "type": "deferred"
     },
     {
@@ -416,8 +425,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 29.58,
-      "buydate": "2020-10-15",
+      "shares": 29403.61,
+      "buydate": "2020-12-16",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -425,8 +434,8 @@
     },
     {
       "symbol": "fidelity",
-      "shares": 0.77,
-      "buydate": "2020-07-17",
+      "shares": 1858.33776,
+      "buydate": "2020-12-16",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -434,8 +443,8 @@
     },
     {
       "symbol": "payflex",
-      "shares": 1545,
-      "buydate": "2020-10-07",
+      "shares": 3655,
+      "buydate": "2020-11-07",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -464,8 +473,8 @@
       "shares": 18.908,
       "buydate": "2020-10-02",
       "purchaseprice": 51.03,
-      "saledate": "",
-      "saleprice": 0,
+      "saledate": "2020-12-16",
+      "saleprice": 51.22,
       "type": "deferred"
     },
     {
@@ -479,8 +488,8 @@
     },
     {
       "symbol": "vig",
-      "shares": 5.175,
-      "buydate": "2020-10-02",
+      "shares": 7.55,
+      "buydate": "2020-11-13",
       "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
@@ -640,10 +649,28 @@
       "type": "taxed"
     },
     {
+      "symbol": "cien",
+      "shares": 232,
+      "buydate": "2020-12-16",
+      "purchaseprice": 35.17,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "v",
       "shares": 50,
       "buydate": "2020-02-24",
       "purchaseprice": 199.62,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
+      "symbol": "v",
+      "shares": 0.148,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "taxed"
@@ -703,10 +730,28 @@
       "type": "taxed"
     },
     {
+      "symbol": "ma",
+      "shares": 0.246,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "nke",
       "shares": 135,
       "buydate": "2020-03-20",
       "purchaseprice": 70,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
+      "symbol": "nke",
+      "shares": 0.596,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "taxed"
@@ -739,6 +784,15 @@
       "type": "taxed"
     },
     {
+      "symbol": "wm",
+      "shares": 0.988,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "aapl",
       "shares": 160,
       "buydate": "2020-03-20",
@@ -749,7 +803,7 @@
     },
     {
       "symbol": "aapl",
-      "shares": 0.72,
+      "shares": 0.996,
       "buydate": "2020-08-31",
       "purchaseprice": 0,
       "saledate": "",
@@ -802,10 +856,28 @@
       "type": "taxed"
     },
     {
+      "symbol": "sbux",
+      "shares": 0.518,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
       "symbol": "syk",
       "shares": 57,
       "buydate": "2020-04-13",
       "purchaseprice": 172.16,
+      "saledate": "",
+      "saleprice": 0,
+      "type": "taxed"
+    },
+    {
+      "symbol": "syk",
+      "shares": 0.325,
+      "buydate": "2020-11-13",
+      "purchaseprice": 0,
       "saledate": "",
       "saleprice": 0,
       "type": "taxed"
@@ -905,8 +977,8 @@
       "shares": 124,
       "buydate": "2020-10-14",
       "purchaseprice": 39.993,
-      "saledate": "",
-      "saleprice": 0,
+      "saledate": "2020-11-03",
+      "saleprice": 41.0635,
       "type": "taxed"
     },
     {
@@ -914,6 +986,15 @@
       "shares": 128,
       "buydate": "2020-10-23",
       "purchaseprice": 39.093,
+      "saledate": "2020-11-03",
+      "saleprice": 41.0635,
+      "type": "taxed"
+    },
+    {
+      "symbol": "bj",
+      "shares": 184,
+      "buydate": "2020-11-09",
+      "purchaseprice": 37.87,
       "saledate": "",
       "saleprice": 0,
       "type": "taxed"
@@ -956,8 +1037,8 @@
     },
     {
       "symbol": "vanguard",
-      "shares": 10528.98,
-      "buydate": "2020-10-07",
+      "shares": 3562.11,
+      "buydate": "2020-11-09",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
@@ -974,8 +1055,8 @@
     },
     {
       "symbol": "etrade",
-      "shares": 53.66,
-      "buydate": "2020-10-30",
+      "shares": 11396.85,
+      "buydate": "2020-12-18",
       "purchaseprice": 1,
       "saledate": "",
       "saleprice": 0,
