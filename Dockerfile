@@ -1,24 +1,32 @@
-# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+FROM golang:1.16-alpine AS build
 
-# Start from the latest golang base image
-FROM golang:latest
+WORKDIR /go/src
 
-WORKDIR /app
+RUN apk add --update gcc
+RUN apk add musl-dev
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+COPY go.mod go.sum main.go models.db ./
+COPY analysis ./analysis
+COPY financialmodelingprep ./financialmodelingprep
+COPY finhub ./finhub 
+COPY input ./input
+COPY output ./output
+COPY models ./models
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+# Install library dependencies
 RUN go mod download
 
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
+RUN go build -o portfolio .
 
-# Build the Go app
-RUN go build -o main .
+# Build a new single layer image
+FROM alpine:latest 
+
+COPY --from=build /go/src .
+COPY --from=build /go/src/output ./output
+COPY --from=build /go/src/input ./input
+RUN touch inpfo.log
 
 # Expose port 8080 to the outside world.
 EXPOSE 8080
 
-# App's entry point
-CMD [ "./main"]
+ENTRYPOINT ["./portfolio"]

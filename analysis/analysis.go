@@ -89,7 +89,9 @@ func applySectorDistribution(pos input.Position, sectorName string, portfolio *i
 			sector[sectorName] += pos.Value
 		} else {
 			if pos.Ticker != "fidelity" && pos.Ticker != "vanguard" &&
-				pos.Ticker != "etrade" && pos.Ticker != "merrill" {
+				pos.Ticker != "etrade" && pos.Ticker != "merrill" &&
+				pos.Ticker != "capital" && pos.Ticker != "liquid" &&
+				pos.Ticker != "hsbc" && pos.Ticker != "webull" && pos.Ticker != "sofi" {
 				sector[mutualFundETF] += pos.Value
 			} else {
 				sector[cash] += pos.Value
@@ -105,7 +107,10 @@ func analyzePortfolio(portfolio *input.Portfolio, pos input.Position) {
 	report.Gain += pos.Gain
 	report.Value += pos.Value
 	report.TodayGain += calcTodayGain(pos)
-	if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" || pos.Ticker == "fidelity" {
+	if pos.Ticker == "etrade" || pos.Ticker == "merrill" ||
+		pos.Ticker == "vanguard" || pos.Ticker == "fidelity" ||
+		pos.Ticker == "capital" || pos.Ticker == "liquid" ||
+		pos.Ticker == "hsbc" || pos.Ticker == "webull" || pos.Ticker == "sofi" {
 		report.Cash += pos.Value
 	}
 }
@@ -140,7 +145,9 @@ func getFinancial(positions []input.Position) {
 	start := time.Now()
 	for index, pos := range positions {
 		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" ||
-			pos.Ticker == "fidelity" || pos.Ticker == "payflex" {
+			pos.Ticker == "fidelity" || pos.Ticker == "payflex" ||
+			pos.Ticker == "capital" || pos.Ticker == "liquid" || pos.Ticker == "hsbc" ||
+			pos.Ticker == "webull" || pos.Ticker == "sofi" {
 			positions[index].Name = pos.Ticker
 			positions[index].RegularMarketPrice = pos.BuyPrice
 		} else {
@@ -187,8 +194,10 @@ func getProfiles(positions map[input.PositionKey][]input.Position, db *gorm.DB) 
 	for key := range positions {
 		if key.Ticker != "fidelity" && key.Ticker != "vanguard" &&
 			key.Ticker != "etrade" && key.Ticker != "merrill" && key.Ticker != "payflex" &&
+			key.Ticker != "capital" && key.Ticker != "liquid" &&
 			key.Ticker != "vinix" && key.Ticker != "sdscx" && key.Ticker != "vig" &&
-			key.Ticker != "seegx" && key.Ticker != "sflnx" {
+			key.Ticker != "seegx" && key.Ticker != "sflnx" && key.Ticker != "hsbc" &&
+			key.Ticker != "webull" && key.Ticker != "sofi" {
 			if _, exist := profiles[key.Ticker]; !exist {
 				profiles[key.Ticker] = finhub.GetProfile(key.Ticker, db)
 			}

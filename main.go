@@ -40,6 +40,7 @@ func main() {
 	defer db.Close()
 
 	// Initialize the router
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.LoadHTMLGlob("output/*.html")
 
