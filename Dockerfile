@@ -5,7 +5,7 @@ WORKDIR /go/src
 RUN apk add --update gcc
 RUN apk add musl-dev
 
-COPY go.mod go.sum main.go models.db ./
+COPY go.mod go.sum main.go ./
 COPY analysis ./analysis
 COPY financialmodelingprep ./financialmodelingprep
 COPY finhub ./finhub 
