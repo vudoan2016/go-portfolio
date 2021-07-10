@@ -21,7 +21,7 @@ RUN go build -o portfolio .
 # Build a new single layer image
 FROM alpine:latest 
 
-COPY --from=build /go/src .
+COPY --from=build /go/src/portfolio .
 COPY --from=build /go/src/output ./output
 COPY --from=build /go/src/input ./input
 RUN touch inpfo.log
