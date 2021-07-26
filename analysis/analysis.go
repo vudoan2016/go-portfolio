@@ -22,23 +22,15 @@ const (
 
 // Run polls stock prices from the slice and performs basic analysis
 func Run(portfolio input.Portfolio, db *gorm.DB) {
-	// Retrieve profile for each company from the database.
-	// If the database doesn't have the profile then use the FinHub API to get it.
-	profiles := getProfiles(portfolio.Positions, db)
-
-	// consolidate() modifies positions hence passing a copy to analyze() instead
-	tmpPortfolio := portfolio
-	analyze(&tmpPortfolio, profiles)
-	output.Render(tmpPortfolio)
-
 	ticker := time.NewTicker(time.Duration(refreshInterval) * time.Minute)
-	for {
-		select {
-		case <-ticker.C:
-			tmpPortfolio := portfolio
-			analyze(&tmpPortfolio, profiles)
-			output.Render(tmpPortfolio)
-		}
+	for ; true; <-ticker.C {
+		// Retrieve profile for each company from the database.
+		// If the database doesn't have the profile then use the FinHub API to get it.
+		profiles := getProfiles(portfolio.Positions, db)
+
+		tmpPortfolio := portfolio
+		analyze(&tmpPortfolio, profiles)
+		output.Render(tmpPortfolio)
 	}
 }
 
@@ -143,6 +135,7 @@ func getFinancial(positions []input.Position) {
 	var e *finance.Equity = nil
 
 	start := time.Now()
+	// There could be multiple positions for each ticker
 	for index, pos := range positions {
 		if pos.Ticker == "etrade" || pos.Ticker == "merrill" || pos.Ticker == "vanguard" ||
 			pos.Ticker == "fidelity" || pos.Ticker == "payflex" ||
@@ -162,6 +155,8 @@ func getFinancial(positions []input.Position) {
 				} else {
 					equities[pos.Ticker] = e
 				}
+				log.Printf("getFinancial(%s) takes %s\n", pos.Ticker, time.Since(start).String())
+
 			}
 			if exist || err == nil {
 				positions[index].Name = e.ShortName
@@ -185,11 +180,11 @@ func getFinancial(positions []input.Position) {
 			}
 		}
 	}
-	log.Println("getFinancial() takes", time.Since(start))
 }
 
 func getProfiles(positions map[input.PositionKey][]input.Position, db *gorm.DB) map[string]models.Company {
 	profiles := make(map[string]models.Company)
+	var err error
 
 	for key := range positions {
 		if key.Ticker != "fidelity" && key.Ticker != "vanguard" &&
@@ -198,8 +193,9 @@ func getProfiles(positions map[input.PositionKey][]input.Position, db *gorm.DB) 
 			key.Ticker != "vinix" && key.Ticker != "sdscx" && key.Ticker != "vig" &&
 			key.Ticker != "seegx" && key.Ticker != "sflnx" && key.Ticker != "hsbc" &&
 			key.Ticker != "webull" && key.Ticker != "sofi" {
-			if _, exist := profiles[key.Ticker]; !exist {
-				profiles[key.Ticker] = finhub.GetProfile(key.Ticker, db)
+			profiles[key.Ticker], err = finhub.GetProfile(key.Ticker, db)
+			if err != nil {
+				break
 			}
 		}
 	}
