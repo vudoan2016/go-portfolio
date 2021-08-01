@@ -17,20 +17,30 @@ const (
 	mutualFundETF       = "Mutual fund/ETF"
 	cash                = "Cash"
 	openingBellHour int = 8
-	refreshInterval int = 5 // 5-minute
+	profileInterval int = 1 // 1-second
+	refreshInterval int = 1 // 1-minute
 )
 
 // Run polls stock prices from the slice and performs basic analysis
-func Run(portfolio input.Portfolio, db *gorm.DB) {
-	ticker := time.NewTicker(time.Duration(refreshInterval) * time.Minute)
-	for ; true; <-ticker.C {
-		// Retrieve profile for each company from the database.
-		// If the database doesn't have the profile then use the FinHub API to get it.
-		profiles := getProfiles(portfolio.Positions, db)
+func Run(portfolio input.Portfolio, profChannel <-chan map[string]models.Company, profSignal chan<- bool) {
+	var profiles map[string]models.Company
 
-		tmpPortfolio := portfolio
-		analyze(&tmpPortfolio, profiles)
-		output.Render(tmpPortfolio)
+	ticker := time.NewTicker(time.Duration(refreshInterval) * time.Minute)
+
+	tmpPortfolio := portfolio
+	analyze(&tmpPortfolio, profiles)
+	output.Render(tmpPortfolio)
+
+	for {
+		select {
+		case <-profChannel:
+			profiles = <-profChannel
+			profSignal <- true
+		case <-ticker.C:
+			tmpPortfolio := portfolio
+			analyze(&tmpPortfolio, profiles)
+			output.Render(tmpPortfolio)
+		}
 	}
 }
 
@@ -182,22 +192,42 @@ func getFinancial(positions []input.Position) {
 	}
 }
 
-func getProfiles(positions map[input.PositionKey][]input.Position, db *gorm.DB) map[string]models.Company {
+func GetProfiles(portfolio input.Portfolio, db *gorm.DB, profChannel chan<- map[string]models.Company) chan bool {
 	profiles := make(map[string]models.Company)
-	var err error
+	var err error = nil
 
-	for key := range positions {
-		if key.Ticker != "fidelity" && key.Ticker != "vanguard" &&
-			key.Ticker != "etrade" && key.Ticker != "merrill" && key.Ticker != "payflex" &&
-			key.Ticker != "capital" && key.Ticker != "liquid" &&
-			key.Ticker != "vinix" && key.Ticker != "sdscx" && key.Ticker != "vig" &&
-			key.Ticker != "seegx" && key.Ticker != "sflnx" && key.Ticker != "hsbc" &&
-			key.Ticker != "webull" && key.Ticker != "sofi" {
-			profiles[key.Ticker], err = finhub.GetProfile(key.Ticker, db)
-			if err != nil {
-				break
+	profTicker := time.NewTicker(time.Duration(profileInterval) * time.Second)
+	stopChannel := make(chan bool)
+
+	go func(profTicker *time.Ticker) {
+		defer profTicker.Stop()
+		for {
+			select {
+			case <-stopChannel:
+				log.Println("Stop profiling")
+				return
+			case <-profTicker.C:
+				for key := range portfolio.Positions {
+					if key.Ticker != "fidelity" && key.Ticker != "vanguard" &&
+						key.Ticker != "etrade" && key.Ticker != "merrill" && key.Ticker != "payflex" &&
+						key.Ticker != "capital" && key.Ticker != "liquid" &&
+						key.Ticker != "vinix" && key.Ticker != "sdscx" && key.Ticker != "vig" &&
+						key.Ticker != "seegx" && key.Ticker != "sflnx" && key.Ticker != "hsbc" &&
+						key.Ticker != "webull" && key.Ticker != "sofi" && key.Ticker != "vti" &&
+						key.Ticker != "vug" && key.Ticker != "vbiax" && key.Ticker != "pogrx" &&
+						key.Ticker != "rth" {
+						profiles[key.Ticker], err = finhub.GetProfile(key.Ticker, db)
+						if err != nil {
+							break
+						}
+					}
+				}
+				if err == nil {
+					profChannel <- profiles
+				}
 			}
 		}
-	}
-	return profiles
+	}(profTicker)
+
+	return stopChannel
 }

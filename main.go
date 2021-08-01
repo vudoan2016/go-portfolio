@@ -51,8 +51,11 @@ func main() {
 	// Load portfolio data
 	portfolio := input.Get(file)
 
+	profChannel := make(chan map[string]models.Company)
+	profSignal := analysis.GetProfiles(portfolio, db, profChannel)
+
 	// Poll stock prices & perform simple analysis
-	go analysis.Run(portfolio, db)
+	go analysis.Run(portfolio, profChannel, profSignal)
 
 	// Ready to serve
 	router.GET("/", output.Respond)

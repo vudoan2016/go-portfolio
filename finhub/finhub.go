@@ -38,8 +38,10 @@ func GetProfile(symbol string, db *gorm.DB) (models.Company, error) {
 		}
 
 		if resp.StatusCode == 429 {
-			log.Println(resp)
+			log.Println(symbol, resp)
 			return c, errors.New("API exceeds limit")
+		} else if resp.StatusCode == 200 {
+			log.Println(symbol, "OK")
 		}
 
 		var result map[string]interface{}
